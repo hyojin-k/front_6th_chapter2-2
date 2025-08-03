@@ -1,19 +1,20 @@
 import { ProductWithUI } from '../types/product';
+import { formatPrice } from '../utils/formatters';
 
 export const Product = ({
   products,
   filteredProducts,
   debouncedSearchTerm,
   getRemainingStock,
-  formatPrice,
   addToCart,
+  isAdmin,
 }: {
   products: ProductWithUI[];
   filteredProducts: ProductWithUI[];
   debouncedSearchTerm: string;
   getRemainingStock: (product: ProductWithUI) => number;
-  formatPrice: (price: number, id: string) => string;
   addToCart: (product: ProductWithUI) => void;
+  isAdmin: boolean;
 }) => {
   return (
     <section>
@@ -78,7 +79,7 @@ export const Product = ({
                   {/* 가격 정보 */}
                   <div className="mb-3">
                     <p className="text-lg font-bold text-gray-900">
-                      {formatPrice(product.price, product.id)}
+                      {formatPrice(product, products, getRemainingStock, isAdmin)}
                     </p>
                     {product.discounts.length > 0 && (
                       <p className="text-xs text-gray-500">

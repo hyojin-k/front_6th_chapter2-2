@@ -4,6 +4,7 @@ import { Notification } from './components/Notification';
 import { useProduct, useDebounce, useNotification } from './hooks';
 import { ProductWithUI } from './types/product';
 import { Product as ProductComponent } from './components/Product';
+import { formatPrice } from './utils/formatters';
 
 // 초기 쿠폰 데이터
 const initialCoupons: Coupon[] = [
@@ -77,22 +78,6 @@ const App = () => {
     discountType: 'amount' as 'amount' | 'percentage',
     discountValue: 0,
   });
-
-  // 가격 포맷팅 함수
-  const formatPrice = (price: number, productId?: string): string => {
-    if (productId) {
-      const product = products.find((p) => p.id === productId);
-      if (product && getRemainingStock(product) <= 0) {
-        return 'SOLD OUT'; // 재고가 없으면 SOLD OUT 표시
-      }
-    }
-
-    if (isAdmin) {
-      return `${price.toLocaleString()}원`; // 관리자 모드에서는 원 표시
-    }
-
-    return `₩${price.toLocaleString()}`; // 일반 모드에서는 ₩ 표시
-  };
 
   // 최대 적용 가능한 할인율 계산
   const getMaxApplicableDiscount = (item: CartItem): number => {
@@ -502,7 +487,7 @@ const App = () => {
                             {product.name}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {formatPrice(product.price, product.id)}
+                            {formatPrice(product, products, getRemainingStock, isAdmin)}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             <span
@@ -941,8 +926,8 @@ const App = () => {
                 filteredProducts={filteredProducts}
                 debouncedSearchTerm={debouncedSearchTerm}
                 getRemainingStock={getRemainingStock}
-                formatPrice={formatPrice}
                 addToCart={addToCart}
+                isAdmin={isAdmin}
               />
             </div>
             {/* 사이드바 - 장바구니 및 결제 정보 */}
