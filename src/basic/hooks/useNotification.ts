@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { NotificationType } from '../types';
 
-function useNotification() {
+export const useNotification = () => {
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
 
   const addNotification = useCallback(
@@ -17,6 +17,4 @@ function useNotification() {
   );
 
   return { notifications, setNotifications, addNotification };
-}
-
-export default useNotification;
+};

@@ -1,48 +1,9 @@
 import { useState, useCallback, useEffect } from 'react';
 import { CartItem, Coupon, Product } from '../types';
-import useNotification from './hooks/useNotification';
 import { Notification } from './components/Notification';
-
-// 상품에 UI 관련 속성을 추가한 확장 인터페이스
-interface ProductWithUI extends Product {
-  description?: string; // 상품 설명
-  isRecommended?: boolean; // 추천 상품 여부
-}
-
-// 초기 상품 데이터
-const initialProducts: ProductWithUI[] = [
-  {
-    id: 'p1',
-    name: '상품1',
-    price: 10000,
-    stock: 20,
-    discounts: [
-      { quantity: 10, rate: 0.1 }, // 10개 이상 구매시 10% 할인
-      { quantity: 20, rate: 0.2 }, // 20개 이상 구매시 20% 할인
-    ],
-    description: '최고급 품질의 프리미엄 상품입니다.',
-  },
-  {
-    id: 'p2',
-    name: '상품2',
-    price: 20000,
-    stock: 20,
-    discounts: [{ quantity: 10, rate: 0.15 }], // 10개 이상 구매시 15% 할인
-    description: '다양한 기능을 갖춘 실용적인 상품입니다.',
-    isRecommended: true, // 추천 상품으로 설정
-  },
-  {
-    id: 'p3',
-    name: '상품3',
-    price: 30000,
-    stock: 20,
-    discounts: [
-      { quantity: 10, rate: 0.2 }, // 10개 이상 구매시 20% 할인
-      { quantity: 30, rate: 0.25 }, // 30개 이상 구매시 25% 할인
-    ],
-    description: '대용량과 고성능을 자랑하는 상품입니다.',
-  },
-];
+import { useProduct, useDebounce, useNotification } from './hooks';
+import { ProductWithUI } from './types/product';
+import { Product as ProductComponent } from './components/Product';
 
 // 초기 쿠폰 데이터
 const initialCoupons: Coupon[] = [
@@ -61,20 +22,10 @@ const initialCoupons: Coupon[] = [
 ];
 
 const App = () => {
+  const { searchTerm, setSearchTerm, debouncedSearchTerm } = useDebounce();
+  const { products, addProduct, updateProduct, deleteProduct, filteredProducts } =
+    useProduct(debouncedSearchTerm);
   const { notifications, setNotifications, addNotification } = useNotification();
-
-  // 상품 목록 상태 관리 (로컬스토리지에서 복원)
-  const [products, setProducts] = useState<ProductWithUI[]>(() => {
-    const saved = localStorage.getItem('products');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        return initialProducts;
-      }
-    }
-    return initialProducts;
-  });
 
   // 장바구니 상태 관리 (로컬스토리지에서 복원)
   const [cart, setCart] = useState<CartItem[]>(() => {
@@ -109,8 +60,6 @@ const App = () => {
   const [showCouponForm, setShowCouponForm] = useState(false); // 쿠폰 폼 표시 여부
   const [activeTab, setActiveTab] = useState<'products' | 'coupons'>('products'); // 활성 탭
   const [showProductForm, setShowProductForm] = useState(false); // 상품 폼 표시 여부
-  const [searchTerm, setSearchTerm] = useState(''); // 검색어
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(''); // 디바운스된 검색어
 
   // 관리자 모드 관련 상태
   const [editingProduct, setEditingProduct] = useState<string | null>(null); // 편집 중인 상품 ID
@@ -226,11 +175,6 @@ const App = () => {
     setTotalItemCount(count);
   }, [cart]);
 
-  // 상품 데이터 로컬스토리지 저장
-  useEffect(() => {
-    localStorage.setItem('products', JSON.stringify(products));
-  }, [products]);
-
   // 쿠폰 데이터 로컬스토리지 저장
   useEffect(() => {
     localStorage.setItem('coupons', JSON.stringify(coupons));
@@ -244,14 +188,6 @@ const App = () => {
       localStorage.removeItem('cart');
     }
   }, [cart]);
-
-  // 검색어 디바운싱 (500ms 지연)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [searchTerm]);
 
   // 장바구니에 상품 추가
   const addToCart = useCallback(
@@ -343,39 +279,6 @@ const App = () => {
     setSelectedCoupon(null);
   }, [addNotification]);
 
-  // 상품 추가 (관리자 기능)
-  const addProduct = useCallback(
-    (newProduct: Omit<ProductWithUI, 'id'>) => {
-      const product: ProductWithUI = {
-        ...newProduct,
-        id: `p${Date.now()}`, // 타임스탬프로 고유 ID 생성
-      };
-      setProducts((prev) => [...prev, product]);
-      addNotification('상품이 추가되었습니다.', 'success');
-    },
-    [addNotification]
-  );
-
-  // 상품 수정 (관리자 기능)
-  const updateProduct = useCallback(
-    (productId: string, updates: Partial<ProductWithUI>) => {
-      setProducts((prev) =>
-        prev.map((product) => (product.id === productId ? { ...product, ...updates } : product))
-      );
-      addNotification('상품이 수정되었습니다.', 'success');
-    },
-    [addNotification]
-  );
-
-  // 상품 삭제 (관리자 기능)
-  const deleteProduct = useCallback(
-    (productId: string) => {
-      setProducts((prev) => prev.filter((p) => p.id !== productId));
-      addNotification('상품이 삭제되었습니다.', 'success');
-    },
-    [addNotification]
-  );
-
   // 쿠폰 추가 (관리자 기능)
   const addCoupon = useCallback(
     (newCoupon: Coupon) => {
@@ -449,16 +352,6 @@ const App = () => {
 
   // 장바구니 총액 계산
   const totals = calculateCartTotal();
-
-  // 검색어에 따른 상품 필터링
-  const filteredProducts = debouncedSearchTerm
-    ? products.filter(
-        (product) =>
-          product.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-          (product.description &&
-            product.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
-      )
-    : products;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -1043,113 +936,14 @@ const App = () => {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <div className="lg:col-span-3">
               {/* 상품 목록 섹션 */}
-              <section>
-                <div className="mb-6 flex justify-between items-center">
-                  <h2 className="text-2xl font-semibold text-gray-800">전체 상품</h2>
-                  <div className="text-sm text-gray-600">총 {products.length}개 상품</div>
-                </div>
-                {/* 검색 결과가 없을 때 */}
-                {filteredProducts.length === 0 ? (
-                  <div className="text-center py-12">
-                    <p className="text-gray-500">
-                      "{debouncedSearchTerm}"에 대한 검색 결과가 없습니다.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {/* 상품 그리드 */}
-                    {filteredProducts.map((product) => {
-                      const remainingStock = getRemainingStock(product);
-
-                      return (
-                        <div
-                          key={product.id}
-                          className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow"
-                        >
-                          {/* 상품 이미지 영역 (placeholder) */}
-                          <div className="relative">
-                            <div className="aspect-square bg-gray-100 flex items-center justify-center">
-                              <svg
-                                className="w-24 h-24 text-gray-300"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={1}
-                                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                />
-                              </svg>
-                            </div>
-                            {/* 추천 상품 배지 */}
-                            {product.isRecommended && (
-                              <span className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
-                                BEST
-                              </span>
-                            )}
-                            {/* 할인 배지 */}
-                            {product.discounts.length > 0 && (
-                              <span className="absolute top-2 left-2 bg-orange-500 text-white text-xs px-2 py-1 rounded">
-                                ~{Math.max(...product.discounts.map((d) => d.rate)) * 100}%
-                              </span>
-                            )}
-                          </div>
-
-                          {/* 상품 정보 */}
-                          <div className="p-4">
-                            <h3 className="font-medium text-gray-900 mb-1">{product.name}</h3>
-                            {product.description && (
-                              <p className="text-sm text-gray-500 mb-2 line-clamp-2">
-                                {product.description}
-                              </p>
-                            )}
-
-                            {/* 가격 정보 */}
-                            <div className="mb-3">
-                              <p className="text-lg font-bold text-gray-900">
-                                {formatPrice(product.price, product.id)}
-                              </p>
-                              {product.discounts.length > 0 && (
-                                <p className="text-xs text-gray-500">
-                                  {product.discounts[0].quantity}개 이상 구매시 할인{' '}
-                                  {product.discounts[0].rate * 100}%
-                                </p>
-                              )}
-                            </div>
-
-                            {/* 재고 상태 */}
-                            <div className="mb-3">
-                              {remainingStock <= 5 && remainingStock > 0 && (
-                                <p className="text-xs text-red-600 font-medium">
-                                  품절임박! {remainingStock}개 남음
-                                </p>
-                              )}
-                              {remainingStock > 5 && (
-                                <p className="text-xs text-gray-500">재고 {remainingStock}개</p>
-                              )}
-                            </div>
-
-                            {/* 장바구니 버튼 */}
-                            <button
-                              onClick={() => addToCart(product)}
-                              disabled={remainingStock <= 0}
-                              className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${
-                                remainingStock <= 0
-                                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                  : 'bg-gray-900 text-white hover:bg-gray-800'
-                              }`}
-                            >
-                              {remainingStock <= 0 ? '품절' : '장바구니 담기'}
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </section>
+              <ProductComponent
+                products={products}
+                filteredProducts={filteredProducts}
+                debouncedSearchTerm={debouncedSearchTerm}
+                getRemainingStock={getRemainingStock}
+                formatPrice={formatPrice}
+                addToCart={addToCart}
+              />
             </div>
             {/* 사이드바 - 장바구니 및 결제 정보 */}
             <div className="lg:col-span-1">
