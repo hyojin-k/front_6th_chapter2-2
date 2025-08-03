@@ -1,14 +1,16 @@
+import { CartItem } from '../../types';
 import { ProductWithUI } from '../types/product';
+import { getRemainingStock } from './productUtils';
 
 export const formatPrice = (
   product: ProductWithUI,
   products: ProductWithUI[],
-  getRemainingStock: (product: ProductWithUI) => number,
+  cart: CartItem[],
   isAdmin: boolean
 ): string => {
   if (product.id) {
     const findProduct = products.find((p) => p.id === product.id);
-    if (findProduct && getRemainingStock(findProduct) <= 0) {
+    if (findProduct && getRemainingStock(findProduct, cart) <= 0) {
       return 'SOLD OUT'; // 재고가 없으면 SOLD OUT 표시
     }
   }

@@ -1,20 +1,21 @@
+import { CartItem } from '../../types';
 import { ProductWithUI } from '../types/product';
-import { formatPrice } from '../utils/formatters';
+import { formatPrice, getRemainingStock } from '../utils';
 
 export const Product = ({
   products,
   filteredProducts,
   debouncedSearchTerm,
-  getRemainingStock,
   addToCart,
   isAdmin,
+  cart,
 }: {
   products: ProductWithUI[];
   filteredProducts: ProductWithUI[];
   debouncedSearchTerm: string;
-  getRemainingStock: (product: ProductWithUI) => number;
   addToCart: (product: ProductWithUI) => void;
   isAdmin: boolean;
+  cart: CartItem[];
 }) => {
   return (
     <section>
@@ -31,7 +32,7 @@ export const Product = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* 상품 그리드 */}
           {filteredProducts.map((product) => {
-            const remainingStock = getRemainingStock(product);
+            const remainingStock = getRemainingStock(product, cart);
 
             return (
               <div
@@ -79,7 +80,7 @@ export const Product = ({
                   {/* 가격 정보 */}
                   <div className="mb-3">
                     <p className="text-lg font-bold text-gray-900">
-                      {formatPrice(product, products, getRemainingStock, isAdmin)}
+                      {formatPrice(product, products, cart, isAdmin)}
                     </p>
                     {product.discounts.length > 0 && (
                       <p className="text-xs text-gray-500">
