@@ -1,17 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import { CartItem, Coupon, Product } from '../types';
+import useNotification from './hooks/useNotification';
+import { Notification } from './components/Notification';
 
 // 상품에 UI 관련 속성을 추가한 확장 인터페이스
 interface ProductWithUI extends Product {
   description?: string; // 상품 설명
   isRecommended?: boolean; // 추천 상품 여부
-}
-
-// 알림 메시지 타입 정의
-interface Notification {
-  id: string;
-  message: string;
-  type: 'error' | 'success' | 'warning';
 }
 
 // 초기 상품 데이터
@@ -66,6 +61,8 @@ const initialCoupons: Coupon[] = [
 ];
 
 const App = () => {
+  const { notifications, setNotifications, addNotification } = useNotification();
+
   // 상품 목록 상태 관리 (로컬스토리지에서 복원)
   const [products, setProducts] = useState<ProductWithUI[]>(() => {
     const saved = localStorage.getItem('products');
@@ -108,7 +105,7 @@ const App = () => {
   // UI 상태 관리
   const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null); // 선택된 쿠폰
   const [isAdmin, setIsAdmin] = useState(false); // 관리자 모드 여부
-  const [notifications, setNotifications] = useState<Notification[]>([]); // 알림 메시지 목록
+
   const [showCouponForm, setShowCouponForm] = useState(false); // 쿠폰 폼 표시 여부
   const [activeTab, setActiveTab] = useState<'products' | 'coupons'>('products'); // 활성 탭
   const [showProductForm, setShowProductForm] = useState(false); // 상품 폼 표시 여부
@@ -219,20 +216,6 @@ const App = () => {
 
     return remaining;
   };
-
-  // 알림 메시지 추가 함수
-  const addNotification = useCallback(
-    (message: string, type: 'error' | 'success' | 'warning' = 'success') => {
-      const id = Date.now().toString();
-      setNotifications((prev) => [...prev, { id, message, type }]);
-
-      // 3초 후 자동으로 알림 제거
-      setTimeout(() => {
-        setNotifications((prev) => prev.filter((n) => n.id !== id));
-      }, 3000);
-    },
-    []
-  );
 
   // 장바구니 총 아이템 수 상태
   const [totalItemCount, setTotalItemCount] = useState(0);
@@ -480,37 +463,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 알림 메시지 표시 영역 */}
-      {notifications.length > 0 && (
-        <div className="fixed top-20 right-4 z-50 space-y-2 max-w-sm">
-          {notifications.map((notif) => (
-            <div
-              key={notif.id}
-              className={`p-4 rounded-md shadow-md text-white flex justify-between items-center ${
-                notif.type === 'error'
-                  ? 'bg-red-600'
-                  : notif.type === 'warning'
-                    ? 'bg-yellow-600'
-                    : 'bg-green-600'
-              }`}
-            >
-              <span className="mr-2">{notif.message}</span>
-              <button
-                onClick={() => setNotifications((prev) => prev.filter((n) => n.id !== notif.id))}
-                className="text-white hover:text-gray-200"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
+      <Notification notifications={notifications} setNotifications={setNotifications} />
 
       {/* 헤더 영역 */}
       <header className="bg-white shadow-sm sticky top-0 z-40 border-b">
