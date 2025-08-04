@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { CouponType } from '../../types';
-import { initialCoupons } from '../constants/coupon';
+import { initialCoupons } from '../constants';
 import { useLocalStorage } from './useLocalStorage';
 
 export const useCoupon = (

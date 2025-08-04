@@ -1,11 +1,11 @@
-import { CartItem } from '../../types';
+import { CartItemType } from '../../types';
 import { ProductWithUI } from '../types/product';
 import { getRemainingStock } from './productUtils';
 
 export const formatPrice = (
   product: ProductWithUI,
   products: ProductWithUI[],
-  cart: CartItem[],
+  cart: CartItemType[],
   isAdmin: boolean
 ): string => {
   if (product.id) {

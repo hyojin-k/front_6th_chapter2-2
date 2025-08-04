@@ -9,6 +9,7 @@ export const useProduct = (debouncedSearchTerm: string) => {
 
   // 상품 목록 상태 관리 (로컬스토리지에서 복원)
   const [products, setProducts] = useLocalStorage<ProductWithUI[]>('products', initialProducts);
+
   // 상품 데이터 로컬스토리지 저장
   useEffect(() => {
     localStorage.setItem('products', JSON.stringify(products));

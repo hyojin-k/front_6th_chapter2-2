@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { CartItemType } from '../../types';
 
 export const Header = ({
@@ -6,15 +7,22 @@ export const Header = ({
   setSearchTerm,
   setIsAdmin,
   cart,
-  totalItemCount,
 }: {
   isAdmin: boolean;
   searchTerm: string;
   setSearchTerm: (value: string) => void;
   setIsAdmin: (value: boolean) => void;
   cart: CartItemType[];
-  totalItemCount: number;
 }) => {
+  // 장바구니 총 아이템 수 상태
+  const [totalItemCount, setTotalItemCount] = useState(0);
+
+  // 장바구니 아이템 수 업데이트
+  useEffect(() => {
+    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    setTotalItemCount(count);
+  }, [cart]);
+
   return (
     <header className="bg-white shadow-sm sticky top-0 z-40 border-b">
       <div className="max-w-7xl mx-auto px-4">
