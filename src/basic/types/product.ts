@@ -1,6 +1,6 @@
-import { Product } from '../../types';
+import { ProductType } from '../../types';
 
-export interface ProductWithUI extends Product {
+export interface ProductWithUI extends ProductType {
   description?: string;
   isRecommended?: boolean;
 }

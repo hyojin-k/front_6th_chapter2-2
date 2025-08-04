@@ -1,6 +1,6 @@
-import { CartItem } from '../../types';
-import { ProductWithUI } from '../types/product';
-import { formatPrice, getRemainingStock } from '../utils';
+import { CartItemType } from '../../../types';
+import { ProductWithUI } from '../../types/product';
+import { formatPrice, getRemainingStock } from '../../utils';
 
 export const Product = ({
   products,
@@ -15,7 +15,7 @@ export const Product = ({
   debouncedSearchTerm: string;
   addToCart: (product: ProductWithUI) => void;
   isAdmin: boolean;
-  cart: CartItem[];
+  cart: CartItemType[];
 }) => {
   return (
     <section>

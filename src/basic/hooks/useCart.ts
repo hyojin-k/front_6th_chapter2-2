@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { CartItem, Coupon } from '../../types';
+import { CartItemType, CouponType } from '../../types';
 import { ProductWithUI } from '../types/product';
 import { getRemainingStock } from '../utils';
 import { useLocalStorage } from './useLocalStorage';
@@ -7,21 +7,21 @@ import { useLocalStorage } from './useLocalStorage';
 export const useCart = (
   products: ProductWithUI[],
   addNotification: (message: string, type: 'success' | 'error') => void,
-  selectedCoupon: Coupon | null
+  selectedCoupon: CouponType | null
 ): {
-  cart: CartItem[];
-  setCart: (cart: CartItem[]) => void;
+  cart: CartItemType[];
+  setCart: (cart: CartItemType[]) => void;
   addToCart: (product: ProductWithUI) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, newQuantity: number) => void;
-  calculateItemTotal: (item: CartItem) => number;
+  calculateItemTotal: (item: CartItemType) => number;
   calculateCartTotal: () => {
     totalBeforeDiscount: number;
     totalAfterDiscount: number;
   };
 } => {
   // 장바구니 상태 관리 (로컬스토리지에서 복원)
-  const [cart, setCart] = useLocalStorage<CartItem[]>('cart', []);
+  const [cart, setCart] = useLocalStorage<CartItemType[]>('cart', []);
 
   // 장바구니 데이터 로컬스토리지 저장
   useEffect(() => {
@@ -98,7 +98,7 @@ export const useCart = (
   );
 
   // 최대 적용 가능한 할인율 계산
-  const getMaxApplicableDiscount = (item: CartItem): number => {
+  const getMaxApplicableDiscount = (item: CartItemType): number => {
     const { discounts } = item.product;
     const { quantity } = item;
 
@@ -119,7 +119,7 @@ export const useCart = (
   };
 
   // 개별 상품 총액 계산 (할인 적용)
-  const calculateItemTotal = (item: CartItem): number => {
+  const calculateItemTotal = (item: CartItemType): number => {
     const { price } = item.product;
     const { quantity } = item;
     const discount = getMaxApplicableDiscount(item);

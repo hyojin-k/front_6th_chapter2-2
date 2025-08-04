@@ -1,4 +1,4 @@
-import { CartItem } from '../../types';
+import { CartItemType } from '../../../types';
 
 export const Cart = ({
   cart,
@@ -6,8 +6,8 @@ export const Cart = ({
   removeFromCart,
   updateQuantity,
 }: {
-  cart: CartItem[];
-  calculateItemTotal: (item: CartItem) => number;
+  cart: CartItemType[];
+  calculateItemTotal: (item: CartItemType) => number;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, newQuantity: number) => void;
 }) => {

@@ -1,4 +1,4 @@
-import { CartItem } from '../../types';
+import { CartItemType } from '../../types';
 
 export const Header = ({
   isAdmin,
@@ -12,7 +12,7 @@ export const Header = ({
   searchTerm: string;
   setSearchTerm: (value: string) => void;
   setIsAdmin: (value: boolean) => void;
-  cart: CartItem[];
+  cart: CartItemType[];
   totalItemCount: number;
 }) => {
   return (

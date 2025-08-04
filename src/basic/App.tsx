@@ -1,30 +1,9 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Coupon } from '../types';
-import { Notification } from './components/Notification';
-import { useProduct, useDebounce, useNotification } from './hooks';
+import { Notification, Header, Coupon, Product, Cart } from './components';
+import { useProduct, useDebounce, useNotification, useCoupon, useCart } from './hooks';
+import { CouponType } from '../types';
 import { ProductWithUI } from './types/product';
-import { Product as ProductComponent } from './components/Product';
-import { useCart } from './hooks/useCart';
-import { Cart } from './components/Cart';
 import { formatPrice } from './utils/formatters';
-import { useLocalStorage } from './hooks/useLocalStorage';
-import { Header } from './components/Header';
-
-// 초기 쿠폰 데이터
-const initialCoupons: Coupon[] = [
-  {
-    name: '5000원 할인',
-    code: 'AMOUNT5000',
-    discountType: 'amount', // 정액 할인
-    discountValue: 5000,
-  },
-  {
-    name: '10% 할인',
-    code: 'PERCENT10',
-    discountType: 'percentage', // 정률 할인
-    discountValue: 10,
-  },
-];
 
 const App = () => {
   const { searchTerm, setSearchTerm, debouncedSearchTerm } = useDebounce();
@@ -32,7 +11,7 @@ const App = () => {
     useProduct(debouncedSearchTerm);
   const { notifications, setNotifications, addNotification } = useNotification();
 
-  const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null); // 선택된 쿠폰
+  const [selectedCoupon, setSelectedCoupon] = useState<CouponType | null>(null); // 선택된 쿠폰
 
   const {
     cart,
@@ -43,9 +22,12 @@ const App = () => {
     calculateCartTotal,
     calculateItemTotal,
   } = useCart(products, addNotification, selectedCoupon);
-
-  // 쿠폰 목록 상태 관리 (로컬스토리지에서 복원)
-  const [coupons, setCoupons] = useLocalStorage<Coupon[]>('coupons', initialCoupons);
+  const { coupons, applyCoupon, addCoupon, deleteCoupon } = useCoupon(
+    calculateCartTotal,
+    addNotification,
+    selectedCoupon,
+    setSelectedCoupon
+  );
 
   // UI 상태 관리
   // const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null); // 선택된 쿠폰
@@ -95,23 +77,6 @@ const App = () => {
     }
   }, [cart]);
 
-  // 쿠폰 적용
-  const applyCoupon = useCallback(
-    (coupon: Coupon) => {
-      const currentTotal = calculateCartTotal().totalAfterDiscount;
-
-      // 정률 쿠폰은 10,000원 이상 구매시에만 사용 가능
-      if (currentTotal < 10000 && coupon.discountType === 'percentage') {
-        addNotification('percentage 쿠폰은 10,000원 이상 구매 시 사용 가능합니다.', 'error');
-        return;
-      }
-
-      setSelectedCoupon(coupon);
-      addNotification('쿠폰이 적용되었습니다.', 'success');
-    },
-    [addNotification, calculateCartTotal]
-  );
-
   // 주문 완료 처리
   const completeOrder = useCallback(() => {
     const orderNumber = `ORD-${Date.now()}`;
@@ -119,32 +84,6 @@ const App = () => {
     setCart([]);
     setSelectedCoupon(null);
   }, [addNotification]);
-
-  // 쿠폰 추가 (관리자 기능)
-  const addCoupon = useCallback(
-    (newCoupon: Coupon) => {
-      const existingCoupon = coupons.find((c) => c.code === newCoupon.code);
-      if (existingCoupon) {
-        addNotification('이미 존재하는 쿠폰 코드입니다.', 'error');
-        return;
-      }
-      setCoupons((prev) => [...prev, newCoupon]);
-      addNotification('쿠폰이 추가되었습니다.', 'success');
-    },
-    [coupons, addNotification]
-  );
-
-  // 쿠폰 삭제 (관리자 기능)
-  const deleteCoupon = useCallback(
-    (couponCode: string) => {
-      setCoupons((prev) => prev.filter((c) => c.code !== couponCode));
-      if (selectedCoupon?.code === couponCode) {
-        setSelectedCoupon(null); // 삭제된 쿠폰이 선택되어 있으면 선택 해제
-      }
-      addNotification('쿠폰이 삭제되었습니다.', 'success');
-    },
-    [selectedCoupon, addNotification]
-  );
 
   // 상품 폼 제출 처리
   const handleProductSubmit = (e: React.FormEvent) => {
@@ -729,7 +668,7 @@ const App = () => {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <div className="lg:col-span-3">
               {/* 상품 목록 섹션 */}
-              <ProductComponent
+              <Product
                 products={products}
                 filteredProducts={filteredProducts}
                 debouncedSearchTerm={debouncedSearchTerm}
@@ -752,35 +691,13 @@ const App = () => {
                 {cart.length > 0 && (
                   <>
                     {/* 쿠폰 섹션 */}
-                    <section className="bg-white rounded-lg border border-gray-200 p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-sm font-semibold text-gray-700">쿠폰 할인</h3>
-                        <button className="text-xs text-blue-600 hover:underline">쿠폰 등록</button>
-                      </div>
-                      {/* 쿠폰 선택 드롭다운 */}
-                      {coupons.length > 0 && (
-                        <select
-                          className="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
-                          value={selectedCoupon?.code || ''}
-                          onChange={(e) => {
-                            const coupon = coupons.find((c) => c.code === e.target.value);
-                            if (coupon) applyCoupon(coupon);
-                            else setSelectedCoupon(null);
-                          }}
-                        >
-                          <option value="">쿠폰 선택</option>
-                          {coupons.map((coupon) => (
-                            <option key={coupon.code} value={coupon.code}>
-                              {coupon.name} (
-                              {coupon.discountType === 'amount'
-                                ? `${coupon.discountValue.toLocaleString()}원`
-                                : `${coupon.discountValue}%`}
-                              )
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                    </section>
+                    <Coupon
+                      coupons={coupons}
+                      selectedCoupon={selectedCoupon}
+                      applyCoupon={applyCoupon}
+                      setSelectedCoupon={setSelectedCoupon}
+                    />
+
                     {/* 결제 정보 섹션 */}
                     <section className="bg-white rounded-lg border border-gray-200 p-4">
                       <h3 className="text-lg font-semibold mb-4">결제 정보</h3>
