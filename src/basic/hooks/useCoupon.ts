@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { CouponType } from '../../types';
 import { initialCoupons } from '../constants';
 import { useLocalStorage } from './useLocalStorage';
@@ -11,6 +11,11 @@ export const useCoupon = (
 ) => {
   // 쿠폰 목록 상태 관리 (로컬스토리지에서 복원)
   const [coupons, setCoupons] = useLocalStorage<CouponType[]>('coupons', initialCoupons);
+
+  // 쿠폰 데이터 로컬스토리지 저장
+  useEffect(() => {
+    localStorage.setItem('coupons', JSON.stringify(coupons));
+  }, [coupons]);
 
   // 쿠폰 적용
   const applyCoupon = useCallback(
