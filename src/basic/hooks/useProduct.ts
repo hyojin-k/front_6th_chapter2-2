@@ -2,23 +2,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { ProductWithUI } from '../types/product';
 import { initialProducts } from '../constants';
 import { useNotification } from './useNotification';
+import { useLocalStorage } from './useLocalStorage';
 
 export const useProduct = (debouncedSearchTerm: string) => {
   const { addNotification } = useNotification();
 
   // 상품 목록 상태 관리 (로컬스토리지에서 복원)
-  const [products, setProducts] = useState<ProductWithUI[]>(() => {
-    const saved = localStorage.getItem('products');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        return initialProducts;
-      }
-    }
-    return initialProducts;
-  });
-
+  const [products, setProducts] = useLocalStorage<ProductWithUI[]>('products', initialProducts);
   // 상품 데이터 로컬스토리지 저장
   useEffect(() => {
     localStorage.setItem('products', JSON.stringify(products));

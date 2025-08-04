@@ -7,6 +7,7 @@ import { Product as ProductComponent } from './components/Product';
 import { useCart } from './hooks/useCart';
 import { Cart } from './components/Cart';
 import { formatPrice } from './utils/formatters';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 // 초기 쿠폰 데이터
 const initialCoupons: Coupon[] = [
@@ -43,17 +44,7 @@ const App = () => {
   } = useCart(products, addNotification, selectedCoupon);
 
   // 쿠폰 목록 상태 관리 (로컬스토리지에서 복원)
-  const [coupons, setCoupons] = useState<Coupon[]>(() => {
-    const saved = localStorage.getItem('coupons');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        return initialCoupons;
-      }
-    }
-    return initialCoupons;
-  });
+  const [coupons, setCoupons] = useLocalStorage<Coupon[]>('coupons', initialCoupons);
 
   // UI 상태 관리
   // const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null); // 선택된 쿠폰

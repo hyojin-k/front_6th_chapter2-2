@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { CartItem, Coupon } from '../../types';
 import { ProductWithUI } from '../types/product';
 import { getRemainingStock } from '../utils';
+import { useLocalStorage } from './useLocalStorage';
 
 export const useCart = (
   products: ProductWithUI[],
@@ -20,17 +21,7 @@ export const useCart = (
   };
 } => {
   // 장바구니 상태 관리 (로컬스토리지에서 복원)
-  const [cart, setCart] = useState<CartItem[]>(() => {
-    const saved = localStorage.getItem('cart');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        return [];
-      }
-    }
-    return [];
-  });
+  const [cart, setCart] = useLocalStorage<CartItem[]>('cart', []);
 
   // 장바구니 데이터 로컬스토리지 저장
   useEffect(() => {
