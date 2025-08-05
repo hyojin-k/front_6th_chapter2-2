@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { CouponType } from '../../../types';
 import { TrashIcon, AddIcon } from '../../icons';
+import { useCouponForm } from '../../hooks/useCouponForm';
 
 export const AdminCoupon = ({
   coupons,
@@ -13,27 +13,8 @@ export const AdminCoupon = ({
   deleteCoupon: (code: string) => void;
   addNotification: (message: string, type: 'success' | 'error') => void;
 }) => {
-  const [showCouponForm, setShowCouponForm] = useState(false);
-  const [couponForm, setCouponForm] = useState({
-    name: '',
-    code: '',
-    discountType: 'amount' as 'amount' | 'percentage',
-    discountValue: 0,
-  });
-
-  // 쿠폰 폼 제출 처리
-  const handleCouponSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    addCoupon(couponForm);
-    // 폼 초기화
-    setCouponForm({
-      name: '',
-      code: '',
-      discountType: 'amount',
-      discountValue: 0,
-    });
-    setShowCouponForm(false);
-  };
+  const { showCouponForm, setShowCouponForm, couponForm, setCouponForm, handleCouponSubmit } =
+    useCouponForm();
 
   return (
     <section className="bg-white rounded-lg border border-gray-200">
@@ -82,7 +63,7 @@ export const AdminCoupon = ({
 
         {showCouponForm && (
           <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <form onSubmit={handleCouponSubmit} className="space-y-4">
+            <form onSubmit={(e) => handleCouponSubmit(e, addCoupon)} className="space-y-4">
               <h3 className="text-md font-medium text-gray-900">새 쿠폰 생성</h3>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <div>
