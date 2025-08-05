@@ -1,21 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Dispatch, useCallback, useState } from 'react';
 import { CouponType } from '../../types';
-import { initialCoupons } from '../constants';
-import { useLocalStorage } from './useLocalStorage';
 
 interface UseCouponPropsType {
+  setCoupons: Dispatch<React.SetStateAction<CouponType[]>>;
   addNotification: (message: string, type: 'success' | 'error') => void;
+  coupons: CouponType[];
 }
 
-export const useCoupon = ({ addNotification }: UseCouponPropsType) => {
-  // 쿠폰 목록 상태 관리 (로컬스토리지에서 복원)
-  const [coupons, setCoupons] = useLocalStorage<CouponType[]>('coupons', initialCoupons);
-
-  // 쿠폰 데이터 로컬스토리지 저장
-  useEffect(() => {
-    localStorage.setItem('coupons', JSON.stringify(coupons));
-  }, [coupons]);
-
+export const useCoupon = ({ coupons, setCoupons, addNotification }: UseCouponPropsType) => {
   // 선택된 쿠폰
   const [selectedCoupon, setSelectedCoupon] = useState<CouponType | null>(null);
 

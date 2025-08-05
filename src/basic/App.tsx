@@ -1,22 +1,41 @@
 import { useState } from 'react';
 import { Notification, Header, AdminPage, MainPage } from './components';
-import { useProduct, useCoupon, useCart, useDebounce, useNotification } from './hooks';
+import {
+  useProduct,
+  useCoupon,
+  useCart,
+  useDebounce,
+  useNotification,
+  useLocalStorage,
+} from './hooks';
+import { initialCoupons, initialProducts } from './constants';
+import { ProductWithUI } from './types/product';
+import { CartItemType, CouponType } from '../types';
 
 const App = () => {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const [products, setProducts] = useLocalStorage<ProductWithUI[]>('products', initialProducts);
+  const [cart, setCart] = useLocalStorage<CartItemType[]>('cart', []);
+  const [coupons, setCoupons] = useState<CouponType[]>(initialCoupons);
+
   const { searchTerm, setSearchTerm, debouncedSearchTerm } = useDebounce();
   const { notifications, setNotifications, addNotification } = useNotification();
-  const { products, setProducts, filteredProducts } = useProduct({
+  const { filteredProducts } = useProduct({
     debouncedSearchTerm,
+    products,
   });
-  const { cart, setCart, addToCart, removeFromCart, updateQuantity, totalItemCount } = useCart({
+  const { addToCart, removeFromCart, updateQuantity, totalItemCount } = useCart({
     products,
     addNotification,
+    cart,
+    setCart,
   });
-  const { coupons, addCoupon, deleteCoupon, selectedCoupon, setSelectedCoupon } = useCoupon({
+  const { addCoupon, deleteCoupon, selectedCoupon, setSelectedCoupon } = useCoupon({
+    coupons,
+    setCoupons,
     addNotification,
   });
-
-  const [isAdmin, setIsAdmin] = useState(false); // 관리자 모드 여부
 
   return (
     <div className="min-h-screen bg-gray-50">

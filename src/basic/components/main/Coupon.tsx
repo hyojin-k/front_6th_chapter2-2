@@ -11,6 +11,7 @@ interface CouponPropsType {
 
 export const Coupon = ({ cart, coupons, selectedCoupon, setSelectedCoupon }: CouponPropsType) => {
   const { addNotification } = useNotification();
+
   return (
     <section className="bg-white rounded-lg border border-gray-200 p-4">
       <div className="flex items-center justify-between mb-3">

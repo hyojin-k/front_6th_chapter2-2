@@ -23,6 +23,7 @@ export const Payment = ({
     cart,
     selectedCoupon,
   });
+
   return (
     <section className="bg-white rounded-lg border border-gray-200 p-4">
       <h3 className="text-lg font-semibold mb-4">결제 정보</h3>

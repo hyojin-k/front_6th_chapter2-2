@@ -1,15 +1,11 @@
 import { ProductWithUI } from '../types/product';
-import { initialProducts } from '../constants';
-import { useLocalStorage } from './useLocalStorage';
 
 interface UseProductPropsType {
+  products: ProductWithUI[];
   debouncedSearchTerm: string;
 }
 
-export const useProduct = ({ debouncedSearchTerm }: UseProductPropsType) => {
-  // 상품 목록 상태 관리 (로컬스토리지에서 복원)
-  const [products, setProducts] = useLocalStorage<ProductWithUI[]>('products', initialProducts);
-
+export const useProduct = ({ products, debouncedSearchTerm }: UseProductPropsType) => {
   // 검색어에 따른 상품 필터링
   const filteredProducts = debouncedSearchTerm
     ? products.filter(
@@ -22,7 +18,6 @@ export const useProduct = ({ debouncedSearchTerm }: UseProductPropsType) => {
 
   return {
     products,
-    setProducts,
     filteredProducts,
   };
 };

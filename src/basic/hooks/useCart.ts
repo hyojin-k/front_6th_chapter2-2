@@ -1,18 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Dispatch, useCallback, useEffect, useState } from 'react';
 import { CartItemType } from '../../types';
 import { ProductWithUI } from '../types/product';
 import { getRemainingStock } from '../utils';
-import { useLocalStorage } from './useLocalStorage';
 
 interface UseCartPropsType {
   products: ProductWithUI[];
   addNotification: (message: string, type: 'success' | 'error') => void;
+  cart: CartItemType[];
+  setCart: Dispatch<React.SetStateAction<CartItemType[]>>;
 }
 
-export const useCart = ({ products, addNotification }: UseCartPropsType) => {
-  // 장바구니 상태 관리 (로컬스토리지에서 복원)
-  const [cart, setCart] = useLocalStorage<CartItemType[]>('cart', []);
-
+export const useCart = ({ products, addNotification, cart, setCart }: UseCartPropsType) => {
   // 장바구니 총 아이템 수 상태
   const [totalItemCount, setTotalItemCount] = useState(0);
 
