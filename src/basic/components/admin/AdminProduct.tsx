@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { ProductWithUI } from '../../types/product';
 import { CartItemType } from '../../../types';
 import { formatPrice } from '../../utils/formatters';
 import { XIcon } from '../../icons';
+import { useProductForm } from '../../hooks/useProductForm';
 
 export const AdminProduct = ({
   products,
@@ -23,51 +23,16 @@ export const AdminProduct = ({
   deleteProduct: (productId: string) => void;
   addNotification: (message: string, type: 'success' | 'error') => void;
 }) => {
-  const [showProductForm, setShowProductForm] = useState(false); // 상품 폼 표시 여부
-
-  const [editingProduct, setEditingProduct] = useState<string | null>(null); // 편집 중인 상품 ID
-  const [productForm, setProductForm] = useState({
-    name: '',
-    price: 0,
-    stock: 0,
-    description: '',
-    discounts: [] as Array<{ quantity: number; rate: number }>,
-  });
-
-  // 상품 폼 제출 처리
-  const handleProductSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (editingProduct && editingProduct !== 'new') {
-      updateProduct(editingProduct, productForm);
-      setEditingProduct(null);
-    } else {
-      addProduct({
-        id: '',
-        name: productForm.name,
-        price: productForm.price,
-        stock: productForm.stock,
-        description: productForm.description,
-        discounts: productForm.discounts,
-      });
-    }
-    // 폼 초기화
-    setProductForm({ name: '', price: 0, stock: 0, description: '', discounts: [] });
-    setEditingProduct(null);
-    setShowProductForm(false);
-  };
-
-  // 상품 편집 시작
-  const startEditProduct = (product: ProductWithUI) => {
-    setEditingProduct(product.id);
-    setProductForm({
-      name: product.name,
-      price: product.price,
-      stock: product.stock,
-      description: product.description || '',
-      discounts: product.discounts || [],
-    });
-    setShowProductForm(true);
-  };
+  const {
+    showProductForm,
+    setShowProductForm,
+    editingProduct,
+    setEditingProduct,
+    productForm,
+    setProductForm,
+    handleProductSubmit,
+    startEditProduct,
+  } = useProductForm();
 
   return (
     <section className="bg-white rounded-lg border border-gray-200">
@@ -160,7 +125,10 @@ export const AdminProduct = ({
       </div>
       {showProductForm && (
         <div className="p-6 border-t border-gray-200 bg-gray-50">
-          <form onSubmit={handleProductSubmit} className="space-y-4">
+          <form
+            onSubmit={(e) => handleProductSubmit(e, addProduct, updateProduct)}
+            className="space-y-4"
+          >
             <h3 className="text-lg font-medium text-gray-900">
               {editingProduct === 'new' ? '새 상품 추가' : '상품 수정'}
             </h3>

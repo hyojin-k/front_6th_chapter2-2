@@ -1,28 +1,21 @@
 import { useState } from 'react';
 import { Notification, Header, AdminPage, MainPage } from './components';
 import { useProduct, useCoupon, useCart, useDebounce, useNotification } from './hooks';
-import { CouponType } from '../types';
 
 const App = () => {
   const { searchTerm, setSearchTerm, debouncedSearchTerm } = useDebounce();
-  const { products, addProduct, updateProduct, deleteProduct, filteredProducts } =
-    useProduct(debouncedSearchTerm);
   const { notifications, setNotifications, addNotification } = useNotification();
-
-  const [selectedCoupon, setSelectedCoupon] = useState<CouponType | null>(null); // 선택된 쿠폰
-
-  const { cart, setCart, addToCart, removeFromCart, updateQuantity } = useCart(
+  const { products, addProduct, updateProduct, deleteProduct, filteredProducts } = useProduct(
+    debouncedSearchTerm,
+    addNotification
+  );
+  const { cart, setCart, addToCart, removeFromCart, updateQuantity, totalItemCount } = useCart(
     products,
     addNotification
   );
-  const { coupons, addCoupon, deleteCoupon } = useCoupon(
-    addNotification,
-    selectedCoupon,
-    setSelectedCoupon
-  );
+  const { coupons, addCoupon, deleteCoupon, selectedCoupon, setSelectedCoupon } =
+    useCoupon(addNotification);
 
-  // UI 상태 관리
-  // const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null); // 선택된 쿠폰
   const [isAdmin, setIsAdmin] = useState(false); // 관리자 모드 여부
 
   return (
@@ -37,6 +30,7 @@ const App = () => {
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         setIsAdmin={setIsAdmin}
+        totalItemCount={totalItemCount}
       />
 
       <main className="max-w-7xl mx-auto px-4 py-8">

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { CartItemType } from '../../types';
 import { ProductWithUI } from '../types/product';
 import { getRemainingStock } from '../utils';
@@ -13,6 +13,7 @@ export const useCart = (
   addToCart: (product: ProductWithUI) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, newQuantity: number) => void;
+  totalItemCount: number;
 } => {
   // 장바구니 상태 관리 (로컬스토리지에서 복원)
   const [cart, setCart] = useLocalStorage<CartItemType[]>('cart', []);
@@ -24,6 +25,15 @@ export const useCart = (
     } else {
       localStorage.removeItem('cart');
     }
+  }, [cart]);
+
+  // 장바구니 총 아이템 수 상태
+  const [totalItemCount, setTotalItemCount] = useState(0);
+
+  // 장바구니 아이템 수 업데이트
+  useEffect(() => {
+    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    setTotalItemCount(count);
   }, [cart]);
 
   // 장바구니에 상품 추가
@@ -97,5 +107,6 @@ export const useCart = (
     addToCart,
     removeFromCart,
     updateQuantity,
+    totalItemCount,
   };
 };

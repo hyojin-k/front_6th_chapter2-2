@@ -1,15 +1,15 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { CouponType } from '../../types';
 import { initialCoupons } from '../constants';
 import { useLocalStorage } from './useLocalStorage';
 
 export const useCoupon = (
-  addNotification: (message: string, type: 'success' | 'error') => void,
-  selectedCoupon: CouponType | null,
-  setSelectedCoupon: (coupon: CouponType | null) => void
+  addNotification: (message: string, type: 'success' | 'error') => void
 ): {
   coupons: CouponType[];
   setCoupons: (coupons: CouponType[]) => void;
+  selectedCoupon: CouponType | null;
+  setSelectedCoupon: (coupon: CouponType | null) => void;
   addCoupon: (newCoupon: CouponType) => void;
   deleteCoupon: (couponCode: string) => void;
 } => {
@@ -20,6 +20,9 @@ export const useCoupon = (
   useEffect(() => {
     localStorage.setItem('coupons', JSON.stringify(coupons));
   }, [coupons]);
+
+  // 선택된 쿠폰
+  const [selectedCoupon, setSelectedCoupon] = useState<CouponType | null>(null);
 
   // 쿠폰 추가 (관리자 기능)
   const addCoupon = useCallback(
@@ -47,5 +50,5 @@ export const useCoupon = (
     [selectedCoupon, addNotification]
   );
 
-  return { coupons, setCoupons, addCoupon, deleteCoupon };
+  return { coupons, setCoupons, addCoupon, deleteCoupon, selectedCoupon, setSelectedCoupon };
 };
