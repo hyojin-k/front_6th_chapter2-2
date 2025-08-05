@@ -5,9 +5,8 @@ import { useProduct, useCoupon, useCart, useDebounce, useNotification } from './
 const App = () => {
   const { searchTerm, setSearchTerm, debouncedSearchTerm } = useDebounce();
   const { notifications, setNotifications, addNotification } = useNotification();
-  const { products, addProduct, updateProduct, deleteProduct, filteredProducts } = useProduct({
+  const { products, setProducts, filteredProducts } = useProduct({
     debouncedSearchTerm,
-    addNotification,
   });
   const { cart, setCart, addToCart, removeFromCart, updateQuantity, totalItemCount } = useCart({
     products,
@@ -39,13 +38,11 @@ const App = () => {
           // 관리자 대시보드
           <AdminPage
             products={products}
+            setProducts={setProducts}
             cart={cart}
             isAdmin={isAdmin}
             addNotification={addNotification}
             coupons={coupons}
-            updateProduct={updateProduct}
-            addProduct={addProduct}
-            deleteProduct={deleteProduct}
             addCoupon={addCoupon}
             deleteCoupon={deleteCoupon}
           />

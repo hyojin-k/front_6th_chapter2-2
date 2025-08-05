@@ -3,25 +3,23 @@ import { CartItemType } from '../../../types';
 import { formatPrice } from '../../utils/formatters';
 import { XIcon } from '../../icons';
 import { useProductForm } from '../../hooks/useProductForm';
+import { useAdminProduct } from '../../hooks/useAdminProduct';
+import { Dispatch, SetStateAction } from 'react';
 
 interface AdminProductPropsType {
   products: ProductWithUI[];
+  setProducts: Dispatch<SetStateAction<ProductWithUI[]>>;
   cart: CartItemType[];
   isAdmin: boolean;
   activeTab: string;
-  updateProduct: (productId: string, updates: Partial<ProductWithUI>) => void;
-  addProduct: (product: ProductWithUI) => void;
-  deleteProduct: (productId: string) => void;
   addNotification: (message: string, type: 'success' | 'error') => void;
 }
 export const AdminProduct = ({
   products,
+  setProducts,
   cart,
   isAdmin,
   activeTab,
-  updateProduct,
-  addProduct,
-  deleteProduct,
   addNotification,
 }: AdminProductPropsType) => {
   const {
@@ -34,6 +32,11 @@ export const AdminProduct = ({
     handleProductSubmit,
     startEditProduct,
   } = useProductForm();
+
+  const { updateProduct, addProduct, deleteProduct } = useAdminProduct({
+    setProducts,
+    addNotification,
+  });
 
   return (
     <section className="bg-white rounded-lg border border-gray-200">

@@ -13,15 +13,6 @@ export const useCart = ({ products, addNotification }: UseCartPropsType) => {
   // 장바구니 상태 관리 (로컬스토리지에서 복원)
   const [cart, setCart] = useLocalStorage<CartItemType[]>('cart', []);
 
-  // 장바구니 데이터 로컬스토리지 저장
-  useEffect(() => {
-    if (cart.length > 0) {
-      localStorage.setItem('cart', JSON.stringify(cart));
-    } else {
-      localStorage.removeItem('cart');
-    }
-  }, [cart]);
-
   // 장바구니 총 아이템 수 상태
   const [totalItemCount, setTotalItemCount] = useState(0);
 
@@ -62,13 +53,16 @@ export const useCart = ({ products, addNotification }: UseCartPropsType) => {
 
       addNotification('장바구니에 담았습니다', 'success');
     },
-    [cart, addNotification]
+    [cart, addNotification, setCart]
   );
 
   // 장바구니에서 상품 제거
-  const removeFromCart = useCallback((productId: string) => {
-    setCart((prevCart) => prevCart.filter((item) => item.product.id !== productId));
-  }, []);
+  const removeFromCart = useCallback(
+    (productId: string) => {
+      setCart((prevCart) => prevCart.filter((item) => item.product.id !== productId));
+    },
+    [setCart]
+  );
 
   // 장바구니 상품 수량 업데이트
   const updateQuantity = useCallback(
@@ -93,7 +87,7 @@ export const useCart = ({ products, addNotification }: UseCartPropsType) => {
         )
       );
     },
-    [products, removeFromCart, addNotification]
+    [products, removeFromCart, addNotification, setCart]
   );
 
   return {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { AdminCoupon } from './AdminCoupon';
 import { AdminProduct } from './AdminProduct';
 import { CartItemType, CouponType } from '../../../types';
@@ -6,26 +6,22 @@ import { ProductWithUI } from '../../types/product';
 
 interface AdminPagePropsType {
   products: ProductWithUI[];
+  setProducts: Dispatch<SetStateAction<ProductWithUI[]>>;
   cart: CartItemType[];
   isAdmin: boolean;
   addNotification: (message: string, type: 'success' | 'error') => void;
   coupons: CouponType[];
-  updateProduct: (productId: string, updates: Partial<ProductWithUI>) => void;
-  addProduct: (product: ProductWithUI) => void;
-  deleteProduct: (productId: string) => void;
   addCoupon: (coupon: CouponType) => void;
   deleteCoupon: (code: string) => void;
 }
 
 export const AdminPage = ({
   products,
+  setProducts,
   cart,
   isAdmin,
   addNotification,
   coupons,
-  updateProduct,
-  addProduct,
-  deleteProduct,
   addCoupon,
   deleteCoupon,
 }: AdminPagePropsType) => {
@@ -66,12 +62,10 @@ export const AdminPage = ({
       {activeTab === 'products' ? (
         <AdminProduct
           products={products}
+          setProducts={setProducts}
           cart={cart}
           isAdmin={isAdmin}
           activeTab={activeTab}
-          updateProduct={updateProduct}
-          addProduct={addProduct}
-          deleteProduct={deleteProduct}
           addNotification={addNotification}
         />
       ) : (
