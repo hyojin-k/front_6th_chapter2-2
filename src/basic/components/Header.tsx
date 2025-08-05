@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CartItemType } from '../../types';
+import { SearchInput } from '../ui/SearchInput';
 
 export const Header = ({
   isAdmin,
@@ -29,15 +30,13 @@ export const Header = ({
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center flex-1">
             <h1 className="text-xl font-semibold text-gray-800">SHOP</h1>
-            {/* 검색창 - 안티패턴: 검색 로직이 컴포넌트에 직접 포함 */}
+            {/* 검색창 */}
             {!isAdmin && (
               <div className="ml-8 flex-1 max-w-md">
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                <SearchInput
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
                   placeholder="상품 검색..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                 />
               </div>
             )}
