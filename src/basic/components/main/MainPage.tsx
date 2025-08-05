@@ -1,7 +1,6 @@
 import { Cart, Coupon, Payment, Product } from '.';
 import { CartItemType, CouponType } from '../../../types';
 import { ProductWithUI } from '../../types/product';
-import { usePayment } from '../../hooks/usePayment';
 
 export const MainPage = ({
   products,
@@ -32,14 +31,6 @@ export const MainPage = ({
   setSelectedCoupon: (coupon: CouponType | null) => void;
   setCart: (cart: CartItemType[]) => void;
 }) => {
-  const { totals, completeOrder } = usePayment(
-    addNotification,
-    setCart,
-    setSelectedCoupon,
-    cart,
-    selectedCoupon
-  );
-
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <div className="lg:col-span-3">
@@ -70,7 +61,13 @@ export const MainPage = ({
               />
 
               {/* 결제 정보 섹션 */}
-              <Payment totals={totals} completeOrder={completeOrder} />
+              <Payment
+                addNotification={addNotification}
+                setCart={setCart}
+                setSelectedCoupon={setSelectedCoupon}
+                cart={cart}
+                selectedCoupon={selectedCoupon}
+              />
             </>
           )}
         </div>

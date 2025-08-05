@@ -1,6 +1,7 @@
 import { CouponType } from '../../../types';
 import { TrashIcon, AddIcon } from '../../icons';
 import { useCouponForm } from '../../hooks/useCouponForm';
+import { validateForm } from '../../utils/validate';
 
 export const AdminCoupon = ({
   coupons,
@@ -115,12 +116,10 @@ export const AdminCoupon = ({
                     value={couponForm.discountValue === 0 ? '' : couponForm.discountValue}
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (value === '' || /^\d+$/.test(value)) {
-                        setCouponForm({
-                          ...couponForm,
-                          discountValue: value === '' ? 0 : parseInt(value),
-                        });
-                      }
+                      setCouponForm({
+                        ...couponForm,
+                        discountValue: validateForm(value),
+                      });
                     }}
                     onBlur={(e) => {
                       const value = parseInt(e.target.value) || 0;
