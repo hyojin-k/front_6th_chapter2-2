@@ -5,44 +5,41 @@ import { usePayment } from '../../hooks/usePayment';
 
 export const MainPage = ({
   products,
+  isAdmin,
+  cart,
+  coupons,
+  addNotification,
   filteredProducts,
   debouncedSearchTerm,
   addToCart,
-  isAdmin,
-  cart,
-  calculateItemTotal,
   removeFromCart,
   updateQuantity,
-  coupons,
   selectedCoupon,
   applyCoupon,
   setSelectedCoupon,
-  addNotification,
   setCart,
-  calculateCartTotal,
 }: {
   products: ProductWithUI[];
-  filteredProducts: ProductWithUI[];
-  debouncedSearchTerm: string;
-  addToCart: (product: ProductWithUI) => void;
   isAdmin: boolean;
   cart: CartItemType[];
-  calculateItemTotal: (item: CartItemType) => number;
+  addNotification: (message: string, type: 'success' | 'error') => void;
+  coupons: CouponType[];
+  filteredProducts: ProductWithUI[];
+  addToCart: (product: ProductWithUI) => void;
+  debouncedSearchTerm: string;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, newQuantity: number) => void;
-  coupons: CouponType[];
   selectedCoupon: CouponType | null;
   applyCoupon: (coupon: CouponType) => void;
   setSelectedCoupon: (coupon: CouponType | null) => void;
-  addNotification: (message: string, type: 'success' | 'error') => void;
   setCart: (cart: CartItemType[]) => void;
-  calculateCartTotal: () => { totalBeforeDiscount: number; totalAfterDiscount: number };
 }) => {
   const { totals, completeOrder } = usePayment(
     addNotification,
     setCart,
     setSelectedCoupon,
-    calculateCartTotal
+    cart,
+    selectedCoupon
   );
 
   return (
@@ -62,12 +59,7 @@ export const MainPage = ({
       <div className="lg:col-span-1">
         <div className="sticky top-24 space-y-4">
           {/* 장바구니 섹션 */}
-          <Cart
-            cart={cart}
-            calculateItemTotal={calculateItemTotal}
-            removeFromCart={removeFromCart}
-            updateQuantity={updateQuantity}
-          />
+          <Cart cart={cart} removeFromCart={removeFromCart} updateQuantity={updateQuantity} />
           {/* 쿠폰 및 결제 정보 (장바구니에 상품이 있을 때만 표시) */}
           {cart.length > 0 && (
             <>

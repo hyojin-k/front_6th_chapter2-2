@@ -1,8 +1,10 @@
+import { CartTotalType } from '../../types/cart';
+
 export const Payment = ({
   totals,
   completeOrder,
 }: {
-  totals: { totalBeforeDiscount: number; totalAfterDiscount: number };
+  totals: CartTotalType;
   completeOrder: () => void;
 }) => {
   return (

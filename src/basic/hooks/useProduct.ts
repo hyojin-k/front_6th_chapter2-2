@@ -1,10 +1,18 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { ProductWithUI } from '../types/product';
 import { initialProducts } from '../constants';
 import { useNotification } from './useNotification';
 import { useLocalStorage } from './useLocalStorage';
 
-export const useProduct = (debouncedSearchTerm: string) => {
+export const useProduct = (
+  debouncedSearchTerm: string
+): {
+  products: ProductWithUI[];
+  addProduct: (newProduct: Omit<ProductWithUI, 'id'>) => ProductWithUI;
+  updateProduct: (productId: string, updates: Partial<ProductWithUI>) => void;
+  deleteProduct: (productId: string) => void;
+  filteredProducts: ProductWithUI[];
+} => {
   const { addNotification } = useNotification();
 
   // 상품 목록 상태 관리 (로컬스토리지에서 복원)

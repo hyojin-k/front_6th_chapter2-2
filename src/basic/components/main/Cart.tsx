@@ -1,13 +1,12 @@
 import { CartItemType } from '../../../types';
+import { calculateItemTotal } from '../../utils/cartUtils';
 
 export const Cart = ({
   cart,
-  calculateItemTotal,
   removeFromCart,
   updateQuantity,
 }: {
   cart: CartItemType[];
-  calculateItemTotal: (item: CartItemType) => number;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, newQuantity: number) => void;
 }) => {
@@ -46,7 +45,7 @@ export const Cart = ({
         <div className="space-y-3">
           {/* 장바구니 아이템 목록 */}
           {cart.map((item) => {
-            const itemTotal = calculateItemTotal(item);
+            const itemTotal = calculateItemTotal(item, cart);
             const originalPrice = item.product.price * item.quantity;
             const hasDiscount = itemTotal < originalPrice;
             const discountRate = hasDiscount

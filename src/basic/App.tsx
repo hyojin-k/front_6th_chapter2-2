@@ -11,17 +11,12 @@ const App = () => {
 
   const [selectedCoupon, setSelectedCoupon] = useState<CouponType | null>(null); // 선택된 쿠폰
 
-  const {
-    cart,
-    setCart,
-    addToCart,
-    removeFromCart,
-    updateQuantity,
-    calculateCartTotal,
-    calculateItemTotal,
-  } = useCart(products, addNotification, selectedCoupon);
+  const { cart, setCart, addToCart, removeFromCart, updateQuantity } = useCart(
+    products,
+    addNotification
+  );
   const { coupons, applyCoupon, addCoupon, deleteCoupon } = useCoupon(
-    calculateCartTotal,
+    cart,
     addNotification,
     selectedCoupon,
     setSelectedCoupon
@@ -71,14 +66,12 @@ const App = () => {
             filteredProducts={filteredProducts}
             debouncedSearchTerm={debouncedSearchTerm}
             addToCart={addToCart}
-            calculateItemTotal={calculateItemTotal}
             removeFromCart={removeFromCart}
             updateQuantity={updateQuantity}
             selectedCoupon={selectedCoupon}
             applyCoupon={applyCoupon}
             setSelectedCoupon={setSelectedCoupon}
             setCart={setCart}
-            calculateCartTotal={calculateCartTotal}
           />
         )}
       </main>

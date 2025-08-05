@@ -8,22 +8,22 @@ export const AdminPage = ({
   products,
   cart,
   isAdmin,
+  addNotification,
+  coupons,
   updateProduct,
   addProduct,
   deleteProduct,
-  addNotification,
-  coupons,
   addCoupon,
   deleteCoupon,
 }: {
   products: ProductWithUI[];
   cart: CartItemType[];
   isAdmin: boolean;
+  addNotification: (message: string, type: 'success' | 'error') => void;
+  coupons: CouponType[];
   updateProduct: (productId: string, updates: Partial<ProductWithUI>) => void;
   addProduct: (product: ProductWithUI) => void;
   deleteProduct: (productId: string) => void;
-  addNotification: (message: string, type: 'success' | 'error') => void;
-  coupons: CouponType[];
   addCoupon: (coupon: CouponType) => void;
   deleteCoupon: (code: string) => void;
 }) => {

@@ -1,13 +1,16 @@
 import { useCallback } from 'react';
 import { CartItemType } from '../../types';
 import { CouponType } from '../../types';
+import { CartTotalType } from '../types/cart';
+import { calculateCartTotal } from '../utils/cartUtils';
 
 export const usePayment = (
   addNotification: (message: string, type: 'success' | 'error') => void,
   setCart: (cart: CartItemType[]) => void,
   setSelectedCoupon: (coupon: CouponType | null) => void,
-  calculateCartTotal: () => { totalBeforeDiscount: number; totalAfterDiscount: number }
-) => {
+  cart: CartItemType[],
+  selectedCoupon: CouponType | null
+): { totals: CartTotalType; completeOrder: () => void } => {
   // 주문 완료 처리
   const completeOrder = useCallback(() => {
     const orderNumber = `ORD-${Date.now()}`;
@@ -17,6 +20,9 @@ export const usePayment = (
   }, [addNotification]);
 
   // 장바구니 총액 계산
-  const totals = calculateCartTotal();
+  const totals = selectedCoupon
+    ? calculateCartTotal(cart, selectedCoupon)
+    : { totalBeforeDiscount: 0, totalAfterDiscount: 0 };
+
   return { totals, completeOrder };
 };

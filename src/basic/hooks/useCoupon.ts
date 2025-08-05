@@ -1,14 +1,21 @@
 import { useCallback, useEffect } from 'react';
-import { CouponType } from '../../types';
+import { CartItemType, CouponType } from '../../types';
 import { initialCoupons } from '../constants';
 import { useLocalStorage } from './useLocalStorage';
+import { calculateCartTotal } from '../utils/cartUtils';
 
 export const useCoupon = (
-  calculateCartTotal: () => { totalAfterDiscount: number },
+  cart: CartItemType[],
   addNotification: (message: string, type: 'success' | 'error') => void,
   selectedCoupon: CouponType | null,
   setSelectedCoupon: (coupon: CouponType | null) => void
-) => {
+): {
+  coupons: CouponType[];
+  setCoupons: (coupons: CouponType[]) => void;
+  applyCoupon: (coupon: CouponType) => void;
+  addCoupon: (newCoupon: CouponType) => void;
+  deleteCoupon: (couponCode: string) => void;
+} => {
   // 쿠폰 목록 상태 관리 (로컬스토리지에서 복원)
   const [coupons, setCoupons] = useLocalStorage<CouponType[]>('coupons', initialCoupons);
 
@@ -20,7 +27,7 @@ export const useCoupon = (
   // 쿠폰 적용
   const applyCoupon = useCallback(
     (coupon: CouponType) => {
-      const currentTotal = calculateCartTotal().totalAfterDiscount;
+      const currentTotal = calculateCartTotal(cart, coupon).totalAfterDiscount;
 
       // 정률 쿠폰은 10,000원 이상 구매시에만 사용 가능
       if (currentTotal < 10000 && coupon.discountType === 'percentage') {
@@ -31,7 +38,7 @@ export const useCoupon = (
       setSelectedCoupon(coupon);
       addNotification('쿠폰이 적용되었습니다.', 'success');
     },
-    [addNotification, calculateCartTotal]
+    [addNotification, cart]
   );
 
   // 쿠폰 추가 (관리자 기능)
