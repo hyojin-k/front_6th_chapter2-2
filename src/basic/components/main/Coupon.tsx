@@ -1,16 +1,19 @@
-import { CouponType } from '../../../types';
+import { CartItemType, CouponType } from '../../../types';
+import { applyCoupon } from '../../utils/couponUtils';
+import { useNotification } from '../../hooks';
 
 export const Coupon = ({
+  cart,
   coupons,
   selectedCoupon,
-  applyCoupon,
   setSelectedCoupon,
 }: {
+  cart: CartItemType[];
   coupons: CouponType[];
   selectedCoupon: CouponType | null;
-  applyCoupon: (coupon: CouponType) => void;
   setSelectedCoupon: (coupon: CouponType | null) => void;
 }) => {
+  const { addNotification } = useNotification();
   return (
     <section className="bg-white rounded-lg border border-gray-200 p-4">
       <div className="flex items-center justify-between mb-3">
@@ -24,7 +27,7 @@ export const Coupon = ({
           value={selectedCoupon?.code || ''}
           onChange={(e) => {
             const coupon = coupons.find((c) => c.code === e.target.value);
-            if (coupon) applyCoupon(coupon);
+            if (coupon) applyCoupon(cart, coupon, setSelectedCoupon, addNotification);
             else setSelectedCoupon(null);
           }}
         >

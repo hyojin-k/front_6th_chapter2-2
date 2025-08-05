@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { CartItemType } from '../../types';
 import { CouponType } from '../../types';
 import { CartTotalType } from '../types/cart';
-import { calculateCartTotal } from '../utils/cartUtils';
+import { calculateCartTotal } from '../utils/calculateUtils';
 
 export const usePayment = (
   addNotification: (message: string, type: 'success' | 'error') => void,

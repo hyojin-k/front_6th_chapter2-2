@@ -1,4 +1,4 @@
-import { Cart, Coupon, Payment, Product } from '..';
+import { Cart, Coupon, Payment, Product } from '.';
 import { CartItemType, CouponType } from '../../../types';
 import { ProductWithUI } from '../../types/product';
 import { usePayment } from '../../hooks/usePayment';
@@ -15,7 +15,6 @@ export const MainPage = ({
   removeFromCart,
   updateQuantity,
   selectedCoupon,
-  applyCoupon,
   setSelectedCoupon,
   setCart,
 }: {
@@ -30,7 +29,6 @@ export const MainPage = ({
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, newQuantity: number) => void;
   selectedCoupon: CouponType | null;
-  applyCoupon: (coupon: CouponType) => void;
   setSelectedCoupon: (coupon: CouponType | null) => void;
   setCart: (cart: CartItemType[]) => void;
 }) => {
@@ -65,9 +63,9 @@ export const MainPage = ({
             <>
               {/* 쿠폰 섹션 */}
               <Coupon
+                cart={cart}
                 coupons={coupons}
                 selectedCoupon={selectedCoupon}
-                applyCoupon={applyCoupon}
                 setSelectedCoupon={setSelectedCoupon}
               />
 

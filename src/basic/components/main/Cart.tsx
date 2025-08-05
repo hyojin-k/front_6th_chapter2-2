@@ -1,5 +1,5 @@
 import { CartItemType } from '../../../types';
-import { calculateItemTotal } from '../../utils/cartUtils';
+import { calculateItemTotal } from '../../utils/calculateUtils';
 
 export const Cart = ({
   cart,

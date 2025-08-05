@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Notification, Header, AdminPage, MainPage } from './components';
-import { useProduct, useDebounce, useNotification, useCoupon, useCart } from './hooks';
+import { useProduct, useCoupon, useCart, useDebounce, useNotification } from './hooks';
 import { CouponType } from '../types';
 
 const App = () => {
@@ -15,8 +15,7 @@ const App = () => {
     products,
     addNotification
   );
-  const { coupons, applyCoupon, addCoupon, deleteCoupon } = useCoupon(
-    cart,
+  const { coupons, addCoupon, deleteCoupon } = useCoupon(
     addNotification,
     selectedCoupon,
     setSelectedCoupon
@@ -69,7 +68,6 @@ const App = () => {
             removeFromCart={removeFromCart}
             updateQuantity={updateQuantity}
             selectedCoupon={selectedCoupon}
-            applyCoupon={applyCoupon}
             setSelectedCoupon={setSelectedCoupon}
             setCart={setCart}
           />
