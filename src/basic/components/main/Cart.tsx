@@ -2,15 +2,13 @@ import { CartItemType } from '../../../types';
 import { calculateItemTotal } from '../../utils/calculateUtils';
 import { ShoppingBagIcon, XIcon } from '../../icons';
 
-export const Cart = ({
-  cart,
-  removeFromCart,
-  updateQuantity,
-}: {
+interface CartPropsType {
   cart: CartItemType[];
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, newQuantity: number) => void;
-}) => {
+}
+
+export const Cart = ({ cart, removeFromCart, updateQuantity }: CartPropsType) => {
   return (
     <section className="bg-white rounded-lg border border-gray-200 p-4">
       <h2 className="text-lg font-semibold mb-4 flex items-center">

@@ -1,16 +1,23 @@
 import { useCallback } from 'react';
 import { CartItemType } from '../../types';
 import { CouponType } from '../../types';
-import { CartTotalType } from '../types/cart';
 import { calculateCartTotal } from '../utils/calculateUtils';
 
-export const usePayment = (
-  addNotification: (message: string, type: 'success' | 'error') => void,
-  setCart: (cart: CartItemType[]) => void,
-  setSelectedCoupon: (coupon: CouponType | null) => void,
-  cart: CartItemType[],
-  selectedCoupon: CouponType | null
-): { totals: CartTotalType; completeOrder: () => void } => {
+interface UsePaymentPropsType {
+  addNotification: (message: string, type: 'success' | 'error') => void;
+  setCart: (cart: CartItemType[]) => void;
+  setSelectedCoupon: (coupon: CouponType | null) => void;
+  cart: CartItemType[];
+  selectedCoupon: CouponType | null;
+}
+
+export const usePayment = ({
+  addNotification,
+  setCart,
+  setSelectedCoupon,
+  cart,
+  selectedCoupon,
+}: UsePaymentPropsType) => {
   // 주문 완료 처리
   const completeOrder = useCallback(() => {
     const orderNumber = `ORD-${Date.now()}`;

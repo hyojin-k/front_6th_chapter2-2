@@ -2,6 +2,22 @@ import { Cart, Coupon, Payment, Product } from '.';
 import { CartItemType, CouponType } from '../../../types';
 import { ProductWithUI } from '../../types/product';
 
+interface MainPagePropsType {
+  products: ProductWithUI[];
+  isAdmin: boolean;
+  cart: CartItemType[];
+  addNotification: (message: string, type: 'success' | 'error') => void;
+  coupons: CouponType[];
+  filteredProducts: ProductWithUI[];
+  addToCart: (product: ProductWithUI) => void;
+  debouncedSearchTerm: string;
+  removeFromCart: (productId: string) => void;
+  updateQuantity: (productId: string, newQuantity: number) => void;
+  selectedCoupon: CouponType | null;
+  setSelectedCoupon: (coupon: CouponType | null) => void;
+  setCart: (cart: CartItemType[]) => void;
+}
+
 export const MainPage = ({
   products,
   isAdmin,
@@ -16,21 +32,7 @@ export const MainPage = ({
   selectedCoupon,
   setSelectedCoupon,
   setCart,
-}: {
-  products: ProductWithUI[];
-  isAdmin: boolean;
-  cart: CartItemType[];
-  addNotification: (message: string, type: 'success' | 'error') => void;
-  coupons: CouponType[];
-  filteredProducts: ProductWithUI[];
-  addToCart: (product: ProductWithUI) => void;
-  debouncedSearchTerm: string;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, newQuantity: number) => void;
-  selectedCoupon: CouponType | null;
-  setSelectedCoupon: (coupon: CouponType | null) => void;
-  setCart: (cart: CartItemType[]) => void;
-}) => {
+}: MainPagePropsType) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <div className="lg:col-span-3">

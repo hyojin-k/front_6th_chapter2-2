@@ -2,17 +2,14 @@ import { CartItemType, CouponType } from '../../../types';
 import { applyCoupon } from '../../utils/couponUtils';
 import { useNotification } from '../../hooks';
 
-export const Coupon = ({
-  cart,
-  coupons,
-  selectedCoupon,
-  setSelectedCoupon,
-}: {
+interface CouponPropsType {
   cart: CartItemType[];
   coupons: CouponType[];
   selectedCoupon: CouponType | null;
   setSelectedCoupon: (coupon: CouponType | null) => void;
-}) => {
+}
+
+export const Coupon = ({ cart, coupons, selectedCoupon, setSelectedCoupon }: CouponPropsType) => {
   const { addNotification } = useNotification();
   return (
     <section className="bg-white rounded-lg border border-gray-200 p-4">

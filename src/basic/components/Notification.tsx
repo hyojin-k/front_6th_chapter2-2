@@ -1,4 +1,3 @@
-import React from 'react';
 import { NotificationType } from '../types';
 import { XIcon } from '../icons';
 
@@ -7,10 +6,7 @@ interface NotificationPropsType {
   setNotifications: (notifications: NotificationType[]) => void;
 }
 
-export const Notification: React.FC<NotificationPropsType> = ({
-  notifications,
-  setNotifications,
-}) => {
+export const Notification = ({ notifications, setNotifications }: NotificationPropsType) => {
   if (notifications.length === 0) {
     return null;
   }

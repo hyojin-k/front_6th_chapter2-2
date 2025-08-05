@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { CouponType } from '../../types';
 
-export const useCouponForm = (): {
-  showCouponForm: boolean;
-  setShowCouponForm: (show: boolean) => void;
-  couponForm: CouponType;
-  setCouponForm: (form: CouponType) => void;
-  handleCouponSubmit: (e: React.FormEvent, addCoupon: (coupon: CouponType) => void) => void;
-} => {
+export const useCouponForm = () => {
   const [showCouponForm, setShowCouponForm] = useState(false);
   const [couponForm, setCouponForm] = useState({
     name: '',

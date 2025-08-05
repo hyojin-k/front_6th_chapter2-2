@@ -4,17 +4,12 @@ import { ProductWithUI } from '../types/product';
 import { getRemainingStock } from '../utils';
 import { useLocalStorage } from './useLocalStorage';
 
-export const useCart = (
-  products: ProductWithUI[],
-  addNotification: (message: string, type: 'success' | 'error') => void
-): {
-  cart: CartItemType[];
-  setCart: (cart: CartItemType[]) => void;
-  addToCart: (product: ProductWithUI) => void;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, newQuantity: number) => void;
-  totalItemCount: number;
-} => {
+interface UseCartPropsType {
+  products: ProductWithUI[];
+  addNotification: (message: string, type: 'success' | 'error') => void;
+}
+
+export const useCart = ({ products, addNotification }: UseCartPropsType) => {
   // 장바구니 상태 관리 (로컬스토리지에서 복원)
   const [cart, setCart] = useLocalStorage<CartItemType[]>('cart', []);
 

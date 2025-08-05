@@ -1,26 +1,28 @@
 import { CartItemType, CouponType } from '../../../types';
 import { usePayment } from '../../hooks/usePayment';
 
+interface PaymentPropsType {
+  addNotification: (message: string, type: 'success' | 'error') => void;
+  setCart: (cart: CartItemType[]) => void;
+  setSelectedCoupon: (coupon: CouponType | null) => void;
+  cart: CartItemType[];
+  selectedCoupon: CouponType | null;
+}
+
 export const Payment = ({
   addNotification,
   setCart,
   setSelectedCoupon,
   cart,
   selectedCoupon,
-}: {
-  addNotification: (message: string, type: 'success' | 'error') => void;
-  setCart: (cart: CartItemType[]) => void;
-  setSelectedCoupon: (coupon: CouponType | null) => void;
-  cart: CartItemType[];
-  selectedCoupon: CouponType | null;
-}) => {
-  const { totals, completeOrder } = usePayment(
+}: PaymentPropsType) => {
+  const { totals, completeOrder } = usePayment({
     addNotification,
     setCart,
     setSelectedCoupon,
     cart,
-    selectedCoupon
-  );
+    selectedCoupon,
+  });
   return (
     <section className="bg-white rounded-lg border border-gray-200 p-4">
       <h3 className="text-lg font-semibold mb-4">결제 정보</h3>

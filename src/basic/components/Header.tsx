@@ -2,6 +2,14 @@ import { CartItemType } from '../../types';
 import { SearchInput } from '../ui/SearchInput';
 import { CartIcon } from '../icons';
 
+interface HeaderPropsType {
+  isAdmin: boolean;
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
+  setIsAdmin: (value: boolean) => void;
+  cart: CartItemType[];
+  totalItemCount: number;
+}
 export const Header = ({
   isAdmin,
   searchTerm,
@@ -9,14 +17,7 @@ export const Header = ({
   setIsAdmin,
   cart,
   totalItemCount,
-}: {
-  isAdmin: boolean;
-  searchTerm: string;
-  setSearchTerm: (value: string) => void;
-  setIsAdmin: (value: boolean) => void;
-  cart: CartItemType[];
-  totalItemCount: number;
-}) => {
+}: HeaderPropsType) => {
   return (
     <header className="bg-white shadow-sm sticky top-0 z-40 border-b">
       <div className="max-w-7xl mx-auto px-4">

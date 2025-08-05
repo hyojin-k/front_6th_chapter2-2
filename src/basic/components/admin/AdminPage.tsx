@@ -4,6 +4,19 @@ import { AdminProduct } from './AdminProduct';
 import { CartItemType, CouponType } from '../../../types';
 import { ProductWithUI } from '../../types/product';
 
+interface AdminPagePropsType {
+  products: ProductWithUI[];
+  cart: CartItemType[];
+  isAdmin: boolean;
+  addNotification: (message: string, type: 'success' | 'error') => void;
+  coupons: CouponType[];
+  updateProduct: (productId: string, updates: Partial<ProductWithUI>) => void;
+  addProduct: (product: ProductWithUI) => void;
+  deleteProduct: (productId: string) => void;
+  addCoupon: (coupon: CouponType) => void;
+  deleteCoupon: (code: string) => void;
+}
+
 export const AdminPage = ({
   products,
   cart,
@@ -15,18 +28,7 @@ export const AdminPage = ({
   deleteProduct,
   addCoupon,
   deleteCoupon,
-}: {
-  products: ProductWithUI[];
-  cart: CartItemType[];
-  isAdmin: boolean;
-  addNotification: (message: string, type: 'success' | 'error') => void;
-  coupons: CouponType[];
-  updateProduct: (productId: string, updates: Partial<ProductWithUI>) => void;
-  addProduct: (product: ProductWithUI) => void;
-  deleteProduct: (productId: string) => void;
-  addCoupon: (coupon: CouponType) => void;
-  deleteCoupon: (code: string) => void;
-}) => {
+}: AdminPagePropsType) => {
   const [activeTab, setActiveTab] = useState<'products' | 'coupons'>('products');
 
   return (

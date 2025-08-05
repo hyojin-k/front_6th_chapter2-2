@@ -5,16 +5,17 @@ import { useProduct, useCoupon, useCart, useDebounce, useNotification } from './
 const App = () => {
   const { searchTerm, setSearchTerm, debouncedSearchTerm } = useDebounce();
   const { notifications, setNotifications, addNotification } = useNotification();
-  const { products, addProduct, updateProduct, deleteProduct, filteredProducts } = useProduct(
+  const { products, addProduct, updateProduct, deleteProduct, filteredProducts } = useProduct({
     debouncedSearchTerm,
-    addNotification
-  );
-  const { cart, setCart, addToCart, removeFromCart, updateQuantity, totalItemCount } = useCart(
+    addNotification,
+  });
+  const { cart, setCart, addToCart, removeFromCart, updateQuantity, totalItemCount } = useCart({
     products,
-    addNotification
-  );
-  const { coupons, addCoupon, deleteCoupon, selectedCoupon, setSelectedCoupon } =
-    useCoupon(addNotification);
+    addNotification,
+  });
+  const { coupons, addCoupon, deleteCoupon, selectedCoupon, setSelectedCoupon } = useCoupon({
+    addNotification,
+  });
 
   const [isAdmin, setIsAdmin] = useState(false); // 관리자 모드 여부
 

@@ -4,6 +4,16 @@ import { formatPrice } from '../../utils/formatters';
 import { XIcon } from '../../icons';
 import { useProductForm } from '../../hooks/useProductForm';
 
+interface AdminProductPropsType {
+  products: ProductWithUI[];
+  cart: CartItemType[];
+  isAdmin: boolean;
+  activeTab: string;
+  updateProduct: (productId: string, updates: Partial<ProductWithUI>) => void;
+  addProduct: (product: ProductWithUI) => void;
+  deleteProduct: (productId: string) => void;
+  addNotification: (message: string, type: 'success' | 'error') => void;
+}
 export const AdminProduct = ({
   products,
   cart,
@@ -13,16 +23,7 @@ export const AdminProduct = ({
   addProduct,
   deleteProduct,
   addNotification,
-}: {
-  products: ProductWithUI[];
-  cart: CartItemType[];
-  isAdmin: boolean;
-  activeTab: string;
-  updateProduct: (productId: string, updates: Partial<ProductWithUI>) => void;
-  addProduct: (product: ProductWithUI) => void;
-  deleteProduct: (productId: string) => void;
-  addNotification: (message: string, type: 'success' | 'error') => void;
-}) => {
+}: AdminProductPropsType) => {
   const {
     showProductForm,
     setShowProductForm,

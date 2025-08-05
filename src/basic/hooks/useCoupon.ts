@@ -3,16 +3,11 @@ import { CouponType } from '../../types';
 import { initialCoupons } from '../constants';
 import { useLocalStorage } from './useLocalStorage';
 
-export const useCoupon = (
-  addNotification: (message: string, type: 'success' | 'error') => void
-): {
-  coupons: CouponType[];
-  setCoupons: (coupons: CouponType[]) => void;
-  selectedCoupon: CouponType | null;
-  setSelectedCoupon: (coupon: CouponType | null) => void;
-  addCoupon: (newCoupon: CouponType) => void;
-  deleteCoupon: (couponCode: string) => void;
-} => {
+interface UseCouponPropsType {
+  addNotification: (message: string, type: 'success' | 'error') => void;
+}
+
+export const useCoupon = ({ addNotification }: UseCouponPropsType) => {
   // 쿠폰 목록 상태 관리 (로컬스토리지에서 복원)
   const [coupons, setCoupons] = useLocalStorage<CouponType[]>('coupons', initialCoupons);
 

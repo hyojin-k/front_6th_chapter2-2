@@ -3,16 +3,12 @@ import { ProductWithUI } from '../types/product';
 import { initialProducts } from '../constants';
 import { useLocalStorage } from './useLocalStorage';
 
-export const useProduct = (
-  debouncedSearchTerm: string,
-  addNotification: (message: string, type: 'success' | 'error') => void
-): {
-  products: ProductWithUI[];
-  addProduct: (newProduct: Omit<ProductWithUI, 'id'>) => ProductWithUI;
-  updateProduct: (productId: string, updates: Partial<ProductWithUI>) => void;
-  deleteProduct: (productId: string) => void;
-  filteredProducts: ProductWithUI[];
-} => {
+interface UseProductPropsType {
+  debouncedSearchTerm: string;
+  addNotification: (message: string, type: 'success' | 'error') => void;
+}
+
+export const useProduct = ({ debouncedSearchTerm, addNotification }: UseProductPropsType) => {
   // 상품 목록 상태 관리 (로컬스토리지에서 복원)
   const [products, setProducts] = useLocalStorage<ProductWithUI[]>('products', initialProducts);
 

@@ -3,17 +3,19 @@ import { TrashIcon, AddIcon } from '../../icons';
 import { useCouponForm } from '../../hooks/useCouponForm';
 import { validateForm } from '../../utils/validate';
 
+interface AdminCouponPropsType {
+  coupons: CouponType[];
+  addCoupon: (coupon: CouponType) => void;
+  deleteCoupon: (code: string) => void;
+  addNotification: (message: string, type: 'success' | 'error') => void;
+}
+
 export const AdminCoupon = ({
   coupons,
   addCoupon,
   deleteCoupon,
   addNotification,
-}: {
-  coupons: CouponType[];
-  addCoupon: (coupon: CouponType) => void;
-  deleteCoupon: (code: string) => void;
-  addNotification: (message: string, type: 'success' | 'error') => void;
-}) => {
+}: AdminCouponPropsType) => {
   const { showCouponForm, setShowCouponForm, couponForm, setCouponForm, handleCouponSubmit } =
     useCouponForm();
 

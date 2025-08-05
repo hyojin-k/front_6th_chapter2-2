@@ -3,6 +3,15 @@ import { ProductWithUI } from '../../types/product';
 import { formatPrice, getRemainingStock } from '../../utils';
 import { ImageIcon } from '../../icons';
 
+interface ProductPropsType {
+  products: ProductWithUI[];
+  filteredProducts: ProductWithUI[];
+  debouncedSearchTerm: string;
+  addToCart: (product: ProductWithUI) => void;
+  isAdmin: boolean;
+  cart: CartItemType[];
+}
+
 export const Product = ({
   products,
   filteredProducts,
@@ -10,14 +19,7 @@ export const Product = ({
   addToCart,
   isAdmin,
   cart,
-}: {
-  products: ProductWithUI[];
-  filteredProducts: ProductWithUI[];
-  debouncedSearchTerm: string;
-  addToCart: (product: ProductWithUI) => void;
-  isAdmin: boolean;
-  cart: CartItemType[];
-}) => {
+}: ProductPropsType) => {
   return (
     <section>
       <div className="mb-6 flex justify-between items-center">

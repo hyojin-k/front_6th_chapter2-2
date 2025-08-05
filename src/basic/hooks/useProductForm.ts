@@ -1,20 +1,7 @@
 import { useState } from 'react';
 import { ProductFormType, ProductWithUI } from '../types/product';
 
-export const useProductForm = (): {
-  showProductForm: boolean;
-  setShowProductForm: (show: boolean) => void;
-  editingProduct: string | null;
-  setEditingProduct: (productId: string | null) => void;
-  productForm: ProductFormType;
-  setProductForm: (form: ProductFormType) => void;
-  handleProductSubmit: (
-    e: React.FormEvent,
-    addProduct: (product: ProductWithUI) => void,
-    updateProduct: (productId: string, updates: Partial<ProductWithUI>) => void
-  ) => void;
-  startEditProduct: (product: ProductWithUI) => void;
-} => {
+export const useProductForm = () => {
   // 상품 폼 표시 여부
   const [showProductForm, setShowProductForm] = useState(false);
   // 편집 중인 상품 ID
