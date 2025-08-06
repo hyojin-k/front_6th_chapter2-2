@@ -1,5 +1,5 @@
 import { CartItemType, CouponType } from '@/types';
-import { CartTotalType } from '../entities/cart/types/cart';
+import { CartTotalType } from '../basic/entities/cart/types/cart';
 import { getMaxApplicableDiscount } from './discountUtils';
 
 // 개별 상품 총액 계산 (할인 적용)

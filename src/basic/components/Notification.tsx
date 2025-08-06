@@ -1,6 +1,6 @@
 import { NotificationType } from '../types/notification';
-import { XIcon } from '../icons';
-import { Button } from '../ui/Button';
+import { XIcon } from '@/icons';
+import { Button } from '@/ui/Button';
 
 interface NotificationPropsType {
   notifications: NotificationType[];

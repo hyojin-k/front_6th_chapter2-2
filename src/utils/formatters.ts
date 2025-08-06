@@ -1,5 +1,5 @@
 import { CartItemType } from '@/types';
-import { ProductWithUI } from '../entities/product/types/product';
+import { ProductWithUI } from '../basic/entities/product/types/product';
 import { getRemainingStock } from './productUtils';
 
 export const formatPrice = (

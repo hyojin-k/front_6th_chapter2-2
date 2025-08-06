@@ -1,7 +1,7 @@
-import { Button } from '../../../ui';
+import { Button } from '@/ui';
 import { ProductFormType } from '../types/product';
-import { XIcon } from '../../../icons';
-import { validateForm } from '../../../utils';
+import { XIcon } from '@/icons';
+import { validateForm } from '@/utils';
 import { initialProductFormData } from '../constants/product';
 
 interface AdminProductFormPropsType {

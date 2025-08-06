@@ -1,7 +1,7 @@
-import { Button } from '../../../ui';
+import { Button } from '@/ui';
 import { ProductWithUI } from '../types/product';
 import { CartItemType } from '@/types';
-import { formatPrice } from '../../../utils';
+import { formatPrice } from '@/utils';
 
 interface AdminProductTablePropsType {
   products: ProductWithUI[];

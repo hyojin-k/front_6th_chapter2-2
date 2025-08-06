@@ -3,7 +3,7 @@ import { ProductWithUI } from '../types/product';
 import { CartItemType } from '@/types';
 import { useProductForm } from '../hooks/useProductForm';
 import { useProduct } from '../hooks/useProduct';
-import { Button } from '../../../ui';
+import { Button } from '@/ui';
 import { initialProductFormData } from '../constants/product';
 import { AdminProductTable } from './AdminProductTable';
 import { AdminProductForm } from './AdminProductForm';

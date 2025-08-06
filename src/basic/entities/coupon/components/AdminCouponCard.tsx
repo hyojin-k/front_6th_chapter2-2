@@ -1,4 +1,4 @@
-import { AddIcon, TrashIcon } from '../../../icons';
+import { AddIcon, TrashIcon } from '@/icons';
 import { CouponType } from '@/types';
 
 interface AdminCouponCardPropsType {

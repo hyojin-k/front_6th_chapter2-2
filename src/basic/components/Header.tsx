@@ -1,6 +1,6 @@
 import { CartItemType } from '@/types';
-import { SearchInput, Button } from '../ui';
-import { CartIcon } from '../icons';
+import { SearchInput, Button } from '@/ui';
+import { CartIcon } from '@/icons';
 
 interface HeaderPropsType {
   isAdmin: boolean;

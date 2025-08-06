@@ -1,5 +1,5 @@
 import { CouponFormType } from '../types/coupon';
-import { validateForm } from '../../../utils';
+import { validateForm } from '@/utils';
 
 interface AdminCouponFormPropsType {
   couponForm: CouponFormType;

@@ -1,7 +1,7 @@
 import { Dispatch, useCallback, useEffect, useState } from 'react';
 import { CartItemType } from '@/types';
 import { ProductWithUI } from '../../product';
-import { getRemainingStock } from '../../../utils';
+import { getRemainingStock } from '@/utils';
 
 interface UseCartPropsType {
   products: ProductWithUI[];
