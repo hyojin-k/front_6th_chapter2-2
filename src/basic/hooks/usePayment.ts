@@ -1,22 +1,17 @@
 import { useCallback } from 'react';
 import { CartItemType } from '../../types';
 import { CouponType } from '../../types';
-import { calculateCartTotal } from '../utils/calculateUtils';
 
 interface UsePaymentPropsType {
   addNotification: (message: string, type: 'success' | 'error') => void;
   setCart: (cart: CartItemType[]) => void;
   setSelectedCoupon: (coupon: CouponType | null) => void;
-  cart: CartItemType[];
-  selectedCoupon: CouponType | null;
 }
 
 export const usePayment = ({
   addNotification,
   setCart,
   setSelectedCoupon,
-  cart,
-  selectedCoupon,
 }: UsePaymentPropsType) => {
   // 주문 완료 처리
   const completeOrder = useCallback(() => {
@@ -26,8 +21,5 @@ export const usePayment = ({
     setSelectedCoupon(null);
   }, [addNotification]);
 
-  // 장바구니 총액 계산
-  const totals = calculateCartTotal(cart, selectedCoupon);
-
-  return { totals, completeOrder };
+  return { completeOrder };
 };

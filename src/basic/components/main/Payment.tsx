@@ -1,6 +1,7 @@
 import { CartItemType, CouponType } from '../../../types';
 import { usePayment } from '../../hooks/usePayment';
 import { Button } from '../../ui/Button';
+import { calculateCartTotal } from '../../utils/calculateUtils';
 
 interface PaymentPropsType {
   addNotification: (message: string, type: 'success' | 'error') => void;
@@ -17,13 +18,14 @@ export const Payment = ({
   cart,
   selectedCoupon,
 }: PaymentPropsType) => {
-  const { totals, completeOrder } = usePayment({
+  const { completeOrder } = usePayment({
     addNotification,
     setCart,
     setSelectedCoupon,
-    cart,
-    selectedCoupon,
   });
+
+  // 장바구니 총액 계산
+  const totals = calculateCartTotal(cart, selectedCoupon);
 
   return (
     <section className="bg-white rounded-lg border border-gray-200 p-4">
