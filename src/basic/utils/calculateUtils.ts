@@ -14,7 +14,7 @@ export const calculateItemTotal = (item: CartItemType, cart: CartItemType[]): nu
 // 장바구니 총액 계산
 export const calculateCartTotal = (
   cart: CartItemType[],
-  selectedCoupon: CouponType
+  selectedCoupon: CouponType | null
 ): CartTotalType => {
   let totalBeforeDiscount = 0;
   let totalAfterDiscount = 0;

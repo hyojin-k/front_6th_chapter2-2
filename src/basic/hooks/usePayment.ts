@@ -27,9 +27,7 @@ export const usePayment = ({
   }, [addNotification]);
 
   // 장바구니 총액 계산
-  const totals = selectedCoupon
-    ? calculateCartTotal(cart, selectedCoupon)
-    : { totalBeforeDiscount: 0, totalAfterDiscount: 0 };
+  const totals = calculateCartTotal(cart, selectedCoupon);
 
   return { totals, completeOrder };
 };
