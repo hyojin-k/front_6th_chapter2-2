@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { ProductFormType, ProductWithUI } from '../types/product';
 import { initialProductFormData } from '../constants/product';
 
-export const useProductForm = () => {
+export const useProductForm = (
+  addProduct: (product: ProductWithUI) => void,
+  updateProduct: (productId: string, updates: Partial<ProductWithUI>) => void
+) => {
   // 상품 폼 표시 여부
   const [showProductForm, setShowProductForm] = useState(false);
   // 편집 중인 상품 ID
@@ -11,11 +14,7 @@ export const useProductForm = () => {
   const [productForm, setProductForm] = useState<ProductFormType>(initialProductFormData);
 
   // 상품 폼 제출 처리
-  const handleProductSubmit = (
-    e: React.FormEvent,
-    addProduct: (product: ProductWithUI) => void,
-    updateProduct: (productId: string, updates: Partial<ProductWithUI>) => void
-  ) => {
+  const handleProductSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingProduct && editingProduct !== 'new') {
       updateProduct(editingProduct, productForm);
