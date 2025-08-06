@@ -1,6 +1,7 @@
 import { CartItemType } from '../../types';
 import { SearchInput } from '../ui/SearchInput';
 import { CartIcon } from '../icons';
+import { Button } from '../ui/Button';
 
 interface HeaderPropsType {
   isAdmin: boolean;
@@ -37,14 +38,13 @@ export const Header = ({
           </div>
           <nav className="flex items-center space-x-4">
             {/* 관리자 모드 토글 버튼 */}
-            <button
+            <Button
               onClick={() => setIsAdmin(!isAdmin)}
-              className={`px-3 py-1.5 text-sm rounded transition-colors ${
-                isAdmin ? 'bg-gray-800 text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}
+              variant={isAdmin ? 'primary' : 'ghost'}
+              size="sm"
             >
               {isAdmin ? '쇼핑몰로 돌아가기' : '관리자 페이지로'}
-            </button>
+            </Button>
             {/* 장바구니 아이콘 */}
             {!isAdmin && (
               <div className="relative">

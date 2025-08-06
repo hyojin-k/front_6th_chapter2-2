@@ -1,5 +1,6 @@
 import { NotificationType } from '../types';
 import { XIcon } from '../icons';
+import { Button } from '../ui/Button';
 
 interface NotificationPropsType {
   notifications: NotificationType[];
@@ -25,12 +26,14 @@ export const Notification = ({ notifications, setNotifications }: NotificationPr
           }`}
         >
           <span className="mr-2">{notif.message}</span>
-          <button
+          <Button
             onClick={() => setNotifications(notifications.filter((n) => n.id !== notif.id))}
-            className="text-white hover:text-gray-200"
+            variant="ghost"
+            size="sm"
+            className="text-white hover:text-gray-200 p-1"
           >
             <XIcon />
-          </button>
+          </Button>
         </div>
       ))}
     </div>

@@ -2,6 +2,7 @@ import { CartItemType } from '../../../types';
 import { ProductWithUI } from '../../types/product';
 import { formatPrice, getRemainingStock } from '../../utils';
 import { ImageIcon } from '../../icons';
+import { Button } from '../../ui/Button';
 
 interface ProductPropsType {
   products: ProductWithUI[];
@@ -94,17 +95,14 @@ export const Product = ({
                   </div>
 
                   {/* 장바구니 버튼 */}
-                  <button
+                  <Button
                     onClick={() => addToCart(product)}
                     disabled={remainingStock <= 0}
-                    className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${
-                      remainingStock <= 0
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-gray-900 text-white hover:bg-gray-800'
-                    }`}
+                    variant={remainingStock <= 0 ? 'secondary' : 'primary'}
+                    fullWidth
                   >
                     {remainingStock <= 0 ? '품절' : '장바구니 담기'}
-                  </button>
+                  </Button>
                 </div>
               </div>
             );

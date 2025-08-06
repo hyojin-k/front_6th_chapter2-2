@@ -1,5 +1,6 @@
 import { CartItemType, CouponType } from '../../../types';
 import { usePayment } from '../../hooks/usePayment';
+import { Button } from '../../ui/Button';
 
 interface PaymentPropsType {
   addNotification: (message: string, type: 'success' | 'error') => void;
@@ -51,12 +52,9 @@ export const Payment = ({
       </div>
 
       {/* 결제 버튼 */}
-      <button
-        onClick={completeOrder}
-        className="w-full mt-4 py-3 bg-yellow-400 text-gray-900 rounded-md font-medium hover:bg-yellow-500 transition-colors"
-      >
+      <Button onClick={completeOrder} variant="warning" fullWidth size="lg" className="mt-4">
         {totals.totalAfterDiscount.toLocaleString()}원 결제하기
-      </button>
+      </Button>
 
       <div className="mt-3 text-xs text-gray-500 text-center">
         <p>* 실제 결제는 이루어지지 않습니다</p>

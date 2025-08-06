@@ -65,7 +65,6 @@ export const AdminPage = ({
           setProducts={setProducts}
           cart={cart}
           isAdmin={isAdmin}
-          activeTab={activeTab}
           addNotification={addNotification}
         />
       ) : (

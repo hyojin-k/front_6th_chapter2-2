@@ -1,6 +1,7 @@
 import { CartItemType } from '../../../types';
 import { calculateItemTotal } from '../../utils/calculateUtils';
 import { ShoppingBagIcon, XIcon } from '../../icons';
+import { Button } from '../../ui/Button';
 
 interface CartPropsType {
   cart: CartItemType[];
@@ -36,31 +37,37 @@ export const Cart = ({ cart, removeFromCart, updateQuantity }: CartPropsType) =>
               <div key={item.product.id} className="border-b pb-3 last:border-b-0">
                 <div className="flex justify-between items-start mb-2">
                   <h4 className="text-sm font-medium text-gray-900 flex-1">{item.product.name}</h4>
-                  <button
+                  <Button
                     onClick={() => removeFromCart(item.product.id)}
-                    className="text-gray-400 hover:text-red-500 ml-2"
+                    variant="ghost"
+                    size="sm"
+                    className="text-gray-400 hover:text-red-500 ml-2 p-1"
                   >
                     <XIcon />
-                  </button>
+                  </Button>
                 </div>
                 <div className="flex items-center justify-between">
                   {/* 수량 조절 버튼 */}
                   <div className="flex items-center">
-                    <button
+                    <Button
                       onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                      className="w-6 h-6 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-100"
+                      variant="outline"
+                      size="sm"
+                      className="w-6 h-6 p-0 flex items-center justify-center"
                     >
                       <span className="text-xs">−</span>
-                    </button>
+                    </Button>
                     <span className="mx-3 text-sm font-medium w-8 text-center">
                       {item.quantity}
                     </span>
-                    <button
+                    <Button
                       onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                      className="w-6 h-6 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-100"
+                      variant="outline"
+                      size="sm"
+                      className="w-6 h-6 p-0 flex items-center justify-center"
                     >
                       <span className="text-xs">+</span>
-                    </button>
+                    </Button>
                   </div>
                   {/* 가격 정보 */}
                   <div className="text-right">

@@ -5,13 +5,13 @@ import { XIcon } from '../../icons';
 import { useProductForm } from '../../hooks/useProductForm';
 import { useAdminProduct } from '../../hooks/useAdminProduct';
 import { Dispatch, SetStateAction } from 'react';
+import { Button } from '../../ui/Button';
 
 interface AdminProductPropsType {
   products: ProductWithUI[];
   setProducts: Dispatch<SetStateAction<ProductWithUI[]>>;
   cart: CartItemType[];
   isAdmin: boolean;
-  activeTab: string;
   addNotification: (message: string, type: 'success' | 'error') => void;
 }
 export const AdminProduct = ({
@@ -19,7 +19,6 @@ export const AdminProduct = ({
   setProducts,
   cart,
   isAdmin,
-  activeTab,
   addNotification,
 }: AdminProductPropsType) => {
   const {
@@ -43,7 +42,7 @@ export const AdminProduct = ({
       <div className="p-6 border-b border-gray-200">
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold">상품 목록</h2>
-          <button
+          <Button
             onClick={() => {
               setEditingProduct('new');
               setProductForm({
@@ -55,10 +54,11 @@ export const AdminProduct = ({
               });
               setShowProductForm(true);
             }}
-            className="px-4 py-2 bg-gray-900 text-white text-sm rounded-md hover:bg-gray-800"
+            variant="primary"
+            size="sm"
           >
             새 상품 추가
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -84,7 +84,7 @@ export const AdminProduct = ({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {(activeTab === 'products' ? products : products).map((product) => (
+            {products.map((product) => (
               <tr key={product.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {product.name}
@@ -109,18 +109,17 @@ export const AdminProduct = ({
                   {product.description || '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button
+                  <Button
                     onClick={() => startEditProduct(product)}
-                    className="text-indigo-600 hover:text-indigo-900 mr-3"
+                    variant="ghost"
+                    size="sm"
+                    className="mr-3"
                   >
                     수정
-                  </button>
-                  <button
-                    onClick={() => deleteProduct(product.id)}
-                    className="text-red-600 hover:text-red-900"
-                  >
+                  </Button>
+                  <Button onClick={() => deleteProduct(product.id)} variant="danger" size="sm">
                     삭제
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -248,19 +247,21 @@ export const AdminProduct = ({
                       placeholder="%"
                     />
                     <span className="text-sm">% 할인</span>
-                    <button
+                    <Button
                       type="button"
                       onClick={() => {
                         const newDiscounts = productForm.discounts.filter((_, i) => i !== index);
                         setProductForm({ ...productForm, discounts: newDiscounts });
                       }}
+                      variant="ghost"
+                      size="sm"
                       className="text-red-600 hover:text-red-800"
                     >
                       <XIcon />
-                    </button>
+                    </Button>
                   </div>
                 ))}
-                <button
+                <Button
                   type="button"
                   onClick={() => {
                     setProductForm({
@@ -268,15 +269,17 @@ export const AdminProduct = ({
                       discounts: [...productForm.discounts, { quantity: 10, rate: 0.1 }],
                     });
                   }}
-                  className="text-sm text-indigo-600 hover:text-indigo-800"
+                  variant="ghost"
+                  size="sm"
+                  className="text-indigo-600 hover:text-indigo-800"
                 >
                   + 할인 추가
-                </button>
+                </Button>
               </div>
             </div>
 
             <div className="flex justify-end gap-3">
-              <button
+              <Button
                 type="button"
                 onClick={() => {
                   setEditingProduct(null);
@@ -289,16 +292,14 @@ export const AdminProduct = ({
                   });
                   setShowProductForm(false);
                 }}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                variant="outline"
+                size="sm"
               >
                 취소
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700"
-              >
+              </Button>
+              <Button type="submit" variant="primary" size="sm">
                 {editingProduct === 'new' ? '추가' : '수정'}
-              </button>
+              </Button>
             </div>
           </form>
         </div>
