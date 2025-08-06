@@ -1,4 +1,4 @@
-import { CartItemType, ProductType } from '../../types';
+import { CartItemType, ProductType } from '@/types';
 
 // 남은 재고 계산
 export const getRemainingStock = (product: ProductType, cart: CartItemType[]): number => {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CouponType } from '../../types';
+import { CouponType } from '@/types';
 import { initialCouponFormData } from '../constants/coupon';
 
 export const useCouponForm = () => {

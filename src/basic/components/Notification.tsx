@@ -1,4 +1,4 @@
-import { NotificationType } from '../types';
+import { NotificationType } from '../types/notification';
 import { XIcon } from '../icons';
 import { Button } from '../ui/Button';
 

@@ -1,4 +1,4 @@
-import { CartItemType, CouponType } from '../../types';
+import { CartItemType, CouponType } from '@/types';
 import { calculateCartTotal } from './calculateUtils';
 
 // 쿠폰 적용

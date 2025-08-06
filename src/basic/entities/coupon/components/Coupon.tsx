@@ -1,6 +1,6 @@
-import { CartItemType, CouponType } from '../../../types';
-import { applyCoupon } from '../../utils/couponUtils';
-import { useNotification } from '../../hooks';
+import { CartItemType, CouponType } from '@/types';
+import { applyCoupon } from '../../../utils';
+import { useNotification } from '../../../hooks';
 
 interface CouponPropsType {
   cart: CartItemType[];

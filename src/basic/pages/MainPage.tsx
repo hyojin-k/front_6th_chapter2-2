@@ -1,6 +1,9 @@
-import { Cart, Coupon, Payment, Product } from '.';
-import { CartItemType, CouponType } from '../../../types';
-import { ProductWithUI } from '../../types/product';
+import { CartItemType, CouponType } from '@/types';
+import { ProductWithUI } from '../entities/product/types/product';
+import { Cart } from '../entities/cart/components/Cart';
+import { Coupon } from '../entities/coupon/components/Coupon';
+import { Payment } from '../entities/payment/components/Payment';
+import { Product } from '../entities/product/components/Product';
 
 interface MainPagePropsType {
   products: ProductWithUI[];

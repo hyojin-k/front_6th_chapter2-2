@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-import { CartItemType } from '../../types';
-import { CouponType } from '../../types';
+import { CartItemType, CouponType } from '@/types';
 
 interface UsePaymentPropsType {
   addNotification: (message: string, type: 'success' | 'error') => void;

@@ -1,7 +1,7 @@
-import { CartItemType, CouponType } from '../../../types';
-import { usePayment } from '../../hooks/usePayment';
-import { Button } from '../../ui/Button';
-import { calculateCartTotal } from '../../utils/calculateUtils';
+import { CartItemType, CouponType } from '@/types';
+import { usePayment } from '../hooks/usePayment';
+import { Button } from '../../../ui';
+import { calculateCartTotal } from '../../../utils';
 
 interface PaymentPropsType {
   addNotification: (message: string, type: 'success' | 'error') => void;

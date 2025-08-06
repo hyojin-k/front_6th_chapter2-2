@@ -1,16 +1,11 @@
 import { useState } from 'react';
-import { Notification, Header, AdminPage, MainPage } from './components';
-import {
-  useProductSearch,
-  useCoupon,
-  useCart,
-  useDebounce,
-  useNotification,
-  useLocalStorage,
-} from './hooks';
-import { initialCoupons, initialProducts } from './constants';
-import { ProductWithUI } from './types/product';
-import { CartItemType, CouponType } from '../types';
+import { AdminPage, MainPage } from './pages';
+import { Header, Notification } from './components';
+import { useDebounce, useLocalStorage, useNotification } from './hooks';
+import { useCart } from './entities/cart';
+import { initialCoupons, useCoupon } from './entities/coupon';
+import { initialProducts, useProductSearch, ProductWithUI } from './entities/product';
+import { CartItemType, CouponType } from '@/types';
 
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(false);

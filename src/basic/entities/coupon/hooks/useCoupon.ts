@@ -1,5 +1,5 @@
 import { Dispatch, useCallback, useState } from 'react';
-import { CouponType } from '../../types';
+import { CouponType } from '@/types';
 
 interface UseCouponPropsType {
   setCoupons: Dispatch<React.SetStateAction<CouponType[]>>;

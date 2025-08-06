@@ -1,13 +1,12 @@
-import { ProductWithUI } from '../../types/product';
-import { CartItemType } from '../../../types';
-import { formatPrice } from '../../utils/formatters';
-import { XIcon } from '../../icons';
-import { useProductForm } from '../../hooks/useProductForm';
-import { useProduct } from '../../hooks/useProduct';
 import { Dispatch, SetStateAction } from 'react';
-import { Button } from '../../ui/Button';
-import { validateForm } from '../../utils/validate';
-import { initialProductFormData } from '../../constants/product';
+import { ProductWithUI } from '../types/product';
+import { CartItemType } from '@/types';
+import { formatPrice, validateForm } from '../../../utils';
+import { XIcon } from '../../../icons';
+import { useProductForm } from '../hooks/useProductForm';
+import { useProduct } from '../hooks/useProduct';
+import { Button } from '../../../ui';
+import { initialProductFormData } from '../constants/product';
 
 interface AdminProductPropsType {
   products: ProductWithUI[];

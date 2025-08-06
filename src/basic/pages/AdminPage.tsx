@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { AdminCoupon } from './AdminCoupon';
-import { AdminProduct } from './AdminProduct';
-import { CartItemType, CouponType } from '../../../types';
-import { ProductWithUI } from '../../types/product';
+import { CartItemType, CouponType } from '@/types';
+import { ProductWithUI } from '../entities/product/types/product';
+import { AdminCoupon } from '../entities/coupon/components/AdminCoupon';
+import { AdminProduct } from '../entities/product/components/AdminProduct';
 
 interface AdminPagePropsType {
   products: ProductWithUI[];

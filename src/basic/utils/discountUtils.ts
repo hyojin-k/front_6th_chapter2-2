@@ -1,4 +1,4 @@
-import { CartItemType } from '../../types';
+import { CartItemType } from '@/types';
 
 // 기본 할인율 계산 (수령 수량에 따른 할인)
 const getBaseDiscount = (item: CartItemType) => {

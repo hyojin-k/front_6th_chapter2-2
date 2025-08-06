@@ -1,4 +1,4 @@
-import { ProductType } from '../../types';
+import { ProductType } from '@/types';
 
 export interface ProductWithUI extends ProductType {
   description?: string;

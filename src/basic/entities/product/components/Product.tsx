@@ -1,8 +1,8 @@
-import { CartItemType } from '../../../types';
-import { ProductWithUI } from '../../types/product';
-import { formatPrice, getRemainingStock } from '../../utils';
-import { ImageIcon } from '../../icons';
-import { Button } from '../../ui/Button';
+import { CartItemType } from '@/types';
+import { ProductWithUI } from '../types/product';
+import { formatPrice, getRemainingStock } from '../../../utils';
+import { ImageIcon } from '../../../icons';
+import { Button } from '../../../ui';
 
 interface ProductPropsType {
   products: ProductWithUI[];

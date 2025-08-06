@@ -1,7 +1,7 @@
-import { CartItemType } from '../../../types';
-import { calculateItemTotal } from '../../utils/calculateUtils';
-import { ShoppingBagIcon, XIcon } from '../../icons';
-import { Button } from '../../ui/Button';
+import { CartItemType } from '@/types';
+import { ShoppingBagIcon, XIcon } from '../../../icons';
+import { calculateItemTotal } from '../../../utils';
+import { Button } from '../../../ui';
 
 interface CartPropsType {
   cart: CartItemType[];

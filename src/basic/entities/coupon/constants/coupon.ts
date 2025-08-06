@@ -1,4 +1,4 @@
-import { CouponType } from '../../types';
+import { CouponType } from '@/types';
 import { CouponFormType } from '../types/coupon';
 
 // 초기 쿠폰 데이터

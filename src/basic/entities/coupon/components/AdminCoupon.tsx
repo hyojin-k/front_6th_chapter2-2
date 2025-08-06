@@ -1,7 +1,7 @@
-import { CouponType } from '../../../types';
-import { TrashIcon, AddIcon } from '../../icons';
-import { useCouponForm } from '../../hooks/useCouponForm';
-import { validateForm } from '../../utils/validate';
+import { CouponType } from '@/types';
+import { TrashIcon, AddIcon } from '../../../icons';
+import { useCouponForm } from '../hooks/useCouponForm';
+import { validateForm } from '../../../utils';
 
 interface AdminCouponPropsType {
   coupons: CouponType[];
@@ -125,6 +125,7 @@ export const AdminCoupon = ({
                     }}
                     onBlur={(e) => {
                       const value = parseInt(e.target.value) || 0;
+
                       if (couponForm.discountType === 'percentage') {
                         if (value > 100) {
                           addNotification('할인율은 100%를 초과할 수 없습니다', 'error');
