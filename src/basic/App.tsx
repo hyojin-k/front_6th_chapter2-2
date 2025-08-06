@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Notification, Header, AdminPage, MainPage } from './components';
 import {
-  useProduct,
+  useProductSearch,
   useCoupon,
   useCart,
   useDebounce,
@@ -21,7 +21,7 @@ const App = () => {
 
   const { searchTerm, setSearchTerm, debouncedSearchTerm } = useDebounce();
   const { notifications, setNotifications, addNotification } = useNotification();
-  const { filteredProducts } = useProduct({
+  const { filteredProducts } = useProductSearch({
     debouncedSearchTerm,
     products,
   });

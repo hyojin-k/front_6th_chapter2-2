@@ -120,7 +120,7 @@ export const AdminCoupon = ({
                       const value = e.target.value;
                       setCouponForm({
                         ...couponForm,
-                        discountValue: validateForm(value),
+                        discountValue: validateForm(value, couponForm.discountValue),
                       });
                     }}
                     onBlur={(e) => {

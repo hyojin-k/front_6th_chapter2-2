@@ -3,9 +3,10 @@ import { CartItemType } from '../../../types';
 import { formatPrice } from '../../utils/formatters';
 import { XIcon } from '../../icons';
 import { useProductForm } from '../../hooks/useProductForm';
-import { useAdminProduct } from '../../hooks/useAdminProduct';
+import { useProduct } from '../../hooks/useProduct';
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '../../ui/Button';
+import { validateForm } from '../../utils/validate';
 
 interface AdminProductPropsType {
   products: ProductWithUI[];
@@ -32,7 +33,7 @@ export const AdminProduct = ({
     startEditProduct,
   } = useProductForm();
 
-  const { updateProduct, addProduct, deleteProduct } = useAdminProduct({
+  const { updateProduct, addProduct, deleteProduct } = useProduct({
     setProducts,
     addNotification,
   });
@@ -162,12 +163,10 @@ export const AdminProduct = ({
                   value={productForm.price === 0 ? '' : productForm.price}
                   onChange={(e) => {
                     const value = e.target.value;
-                    if (value === '' || /^\d+$/.test(value)) {
-                      setProductForm({
-                        ...productForm,
-                        price: value === '' ? 0 : parseInt(value),
-                      });
-                    }
+                    setProductForm({
+                      ...productForm,
+                      price: validateForm(value, productForm.price),
+                    });
                   }}
                   onBlur={(e) => {
                     const value = e.target.value;
@@ -190,12 +189,10 @@ export const AdminProduct = ({
                   value={productForm.stock === 0 ? '' : productForm.stock}
                   onChange={(e) => {
                     const value = e.target.value;
-                    if (value === '' || /^\d+$/.test(value)) {
-                      setProductForm({
-                        ...productForm,
-                        stock: value === '' ? 0 : parseInt(value),
-                      });
-                    }
+                    setProductForm({
+                      ...productForm,
+                      stock: validateForm(value, productForm.stock),
+                    });
                   }}
                   onBlur={(e) => {
                     const value = e.target.value;
