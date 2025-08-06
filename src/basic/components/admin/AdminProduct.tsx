@@ -7,6 +7,7 @@ import { useProduct } from '../../hooks/useProduct';
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '../../ui/Button';
 import { validateForm } from '../../utils/validate';
+import { initialProductFormData } from '../../constants/product';
 
 interface AdminProductPropsType {
   products: ProductWithUI[];
@@ -46,13 +47,7 @@ export const AdminProduct = ({
           <Button
             onClick={() => {
               setEditingProduct('new');
-              setProductForm({
-                name: '',
-                price: 0,
-                stock: 0,
-                description: '',
-                discounts: [],
-              });
+              setProductForm(initialProductFormData);
               setShowProductForm(true);
             }}
             variant="primary"
@@ -280,13 +275,7 @@ export const AdminProduct = ({
                 type="button"
                 onClick={() => {
                   setEditingProduct(null);
-                  setProductForm({
-                    name: '',
-                    price: 0,
-                    stock: 0,
-                    description: '',
-                    discounts: [],
-                  });
+                  setProductForm(initialProductFormData);
                   setShowProductForm(false);
                 }}
                 variant="outline"

@@ -1,4 +1,4 @@
-import { ProductWithUI } from '../types/product';
+import { ProductFormType, ProductWithUI } from '../types/product';
 
 // 초기 상품 데이터
 export const initialProducts: ProductWithUI[] = [
@@ -34,3 +34,12 @@ export const initialProducts: ProductWithUI[] = [
     description: '대용량과 고성능을 자랑하는 상품입니다.',
   },
 ];
+
+// 상품 초기 form 데이터
+export const initialProductFormData: ProductFormType = {
+  name: '',
+  price: 0,
+  stock: 0,
+  description: '',
+  discounts: [],
+};

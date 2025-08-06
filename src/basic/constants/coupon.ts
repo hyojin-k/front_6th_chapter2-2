@@ -1,4 +1,5 @@
 import { CouponType } from '../../types';
+import { CouponFormType } from '../types/coupon';
 
 // 초기 쿠폰 데이터
 export const initialCoupons: CouponType[] = [
@@ -15,3 +16,11 @@ export const initialCoupons: CouponType[] = [
     discountValue: 10,
   },
 ];
+
+// 초기 쿠폰 form 데이터
+export const initialCouponFormData: CouponFormType = {
+  name: '',
+  code: '',
+  discountType: 'amount',
+  discountValue: 0,
+};

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ProductFormType, ProductWithUI } from '../types/product';
+import { initialProductFormData } from '../constants/product';
 
 export const useProductForm = () => {
   // 상품 폼 표시 여부
@@ -7,13 +8,7 @@ export const useProductForm = () => {
   // 편집 중인 상품 ID
   const [editingProduct, setEditingProduct] = useState<string | null>(null);
 
-  const [productForm, setProductForm] = useState<ProductFormType>({
-    name: '',
-    price: 0,
-    stock: 0,
-    description: '',
-    discounts: [] as Array<{ quantity: number; rate: number }>,
-  });
+  const [productForm, setProductForm] = useState<ProductFormType>(initialProductFormData);
 
   // 상품 폼 제출 처리
   const handleProductSubmit = (
@@ -36,7 +31,7 @@ export const useProductForm = () => {
       });
     }
     // 폼 초기화
-    setProductForm({ name: '', price: 0, stock: 0, description: '', discounts: [] });
+    setProductForm(initialProductFormData);
     setEditingProduct(null);
     setShowProductForm(false);
   };
