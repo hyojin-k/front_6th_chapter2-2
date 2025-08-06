@@ -8,16 +8,18 @@ interface HeaderPropsType {
   setSearchTerm: (value: string) => void;
   setIsAdmin: (value: boolean) => void;
   cart: CartItemType[];
-  totalItemCount: number;
 }
+
 export const Header = ({
   isAdmin,
   searchTerm,
   setSearchTerm,
   setIsAdmin,
   cart,
-  totalItemCount,
 }: HeaderPropsType) => {
+  // 장바구니 총 아이템 수 계산
+  const totalItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
     <header className="bg-white shadow-sm sticky top-0 z-40 border-b">
       <div className="max-w-7xl mx-auto px-4">

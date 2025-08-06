@@ -1,51 +1,56 @@
+import { Dispatch, SetStateAction } from 'react';
 import { CartItemType, CouponType } from '@/types';
 import { ProductWithUI } from '../entities/product/types/product';
 import { Cart } from '../entities/cart/components/Cart';
 import { Coupon } from '../entities/coupon/components/Coupon';
 import { Payment } from '../entities/payment/components/Payment';
 import { Product } from '../entities/product/components/Product';
+import { useCart } from '../entities/cart';
+import { useCoupon } from '../entities/coupon';
 
 interface MainPagePropsType {
   products: ProductWithUI[];
-  isAdmin: boolean;
   cart: CartItemType[];
-  addNotification: (message: string, type: 'success' | 'error') => void;
+  setCart: Dispatch<SetStateAction<CartItemType[]>>;
   coupons: CouponType[];
-  filteredProducts: ProductWithUI[];
-  addToCart: (product: ProductWithUI) => void;
+  setCoupons: Dispatch<SetStateAction<CouponType[]>>;
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
   debouncedSearchTerm: string;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, newQuantity: number) => void;
-  selectedCoupon: CouponType | null;
-  setSelectedCoupon: (coupon: CouponType | null) => void;
-  setCart: (cart: CartItemType[]) => void;
+  addNotification: (message: string, type: 'success' | 'error') => void;
 }
 
 export const MainPage = ({
   products,
-  isAdmin,
   cart,
-  coupons,
-  addNotification,
-  filteredProducts,
-  debouncedSearchTerm,
-  addToCart,
-  removeFromCart,
-  updateQuantity,
-  selectedCoupon,
-  setSelectedCoupon,
   setCart,
+  coupons,
+  setCoupons,
+  debouncedSearchTerm,
+  addNotification,
 }: MainPagePropsType) => {
+  const { addToCart, removeFromCart, updateQuantity } = useCart({
+    products,
+    addNotification,
+    cart,
+    setCart,
+  });
+
+  const { selectedCoupon, setSelectedCoupon } = useCoupon({
+    coupons,
+    setCoupons,
+    addNotification,
+  });
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <div className="lg:col-span-3">
         {/* 상품 목록 섹션 */}
         <Product
           products={products}
-          filteredProducts={filteredProducts}
           debouncedSearchTerm={debouncedSearchTerm}
           addToCart={addToCart}
-          isAdmin={isAdmin}
+          isAdmin={false}
           cart={cart}
         />
       </div>

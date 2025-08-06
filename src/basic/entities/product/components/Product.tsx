@@ -3,10 +3,10 @@ import { ProductWithUI } from '../types/product';
 import { formatPrice, getRemainingStock } from '@/utils';
 import { ImageIcon } from '@/icons';
 import { Button } from '@/ui';
+import { useProductSearch } from '../hooks/useProductSearch';
 
 interface ProductPropsType {
   products: ProductWithUI[];
-  filteredProducts: ProductWithUI[];
   debouncedSearchTerm: string;
   addToCart: (product: ProductWithUI) => void;
   isAdmin: boolean;
@@ -15,12 +15,16 @@ interface ProductPropsType {
 
 export const Product = ({
   products,
-  filteredProducts,
   debouncedSearchTerm,
   addToCart,
   isAdmin,
   cart,
 }: ProductPropsType) => {
+  const { filteredProducts } = useProductSearch({
+    debouncedSearchTerm,
+    products,
+  });
+
   return (
     <section>
       <div className="mb-6 flex justify-between items-center">

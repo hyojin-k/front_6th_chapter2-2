@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { AdminPage, MainPage } from './pages';
 import { Header, Notification } from './components';
 import { useDebounce, useLocalStorage, useNotification } from './hooks';
-import { useCart } from './entities/cart';
-import { initialCoupons, useCoupon } from './entities/coupon';
-import { initialProducts, useProductSearch, ProductWithUI } from './entities/product';
+import { initialProducts, ProductWithUI } from './entities/product';
+import { initialCoupons } from './entities/coupon';
 import { CartItemType, CouponType } from '@/types';
 
 const App = () => {
@@ -16,21 +15,6 @@ const App = () => {
 
   const { searchTerm, setSearchTerm, debouncedSearchTerm } = useDebounce();
   const { notifications, setNotifications, addNotification } = useNotification();
-  const { filteredProducts } = useProductSearch({
-    debouncedSearchTerm,
-    products,
-  });
-  const { addToCart, removeFromCart, updateQuantity, totalItemCount } = useCart({
-    products,
-    addNotification,
-    cart,
-    setCart,
-  });
-  const { addCoupon, deleteCoupon, selectedCoupon, setSelectedCoupon } = useCoupon({
-    coupons,
-    setCoupons,
-    addNotification,
-  });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -44,7 +28,6 @@ const App = () => {
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         setIsAdmin={setIsAdmin}
-        totalItemCount={totalItemCount}
       />
 
       <main className="max-w-7xl mx-auto px-4 py-8">
@@ -54,28 +37,22 @@ const App = () => {
             products={products}
             setProducts={setProducts}
             cart={cart}
-            isAdmin={isAdmin}
-            addNotification={addNotification}
             coupons={coupons}
-            addCoupon={addCoupon}
-            deleteCoupon={deleteCoupon}
+            setCoupons={setCoupons}
+            addNotification={addNotification}
           />
         ) : (
           // 쇼핑몰 메인 페이지
           <MainPage
             products={products}
             cart={cart}
-            isAdmin={isAdmin}
-            addNotification={addNotification}
-            coupons={coupons}
-            filteredProducts={filteredProducts}
-            debouncedSearchTerm={debouncedSearchTerm}
-            addToCart={addToCart}
-            removeFromCart={removeFromCart}
-            updateQuantity={updateQuantity}
-            selectedCoupon={selectedCoupon}
-            setSelectedCoupon={setSelectedCoupon}
             setCart={setCart}
+            coupons={coupons}
+            setCoupons={setCoupons}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            debouncedSearchTerm={debouncedSearchTerm}
+            addNotification={addNotification}
           />
         )}
       </main>

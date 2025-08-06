@@ -8,22 +8,18 @@ interface AdminPagePropsType {
   products: ProductWithUI[];
   setProducts: Dispatch<SetStateAction<ProductWithUI[]>>;
   cart: CartItemType[];
-  isAdmin: boolean;
-  addNotification: (message: string, type: 'success' | 'error') => void;
   coupons: CouponType[];
-  addCoupon: (coupon: CouponType) => void;
-  deleteCoupon: (code: string) => void;
+  setCoupons: Dispatch<SetStateAction<CouponType[]>>;
+  addNotification: (message: string, type: 'success' | 'error') => void;
 }
 
 export const AdminPage = ({
   products,
   setProducts,
   cart,
-  isAdmin,
-  addNotification,
   coupons,
-  addCoupon,
-  deleteCoupon,
+  setCoupons,
+  addNotification,
 }: AdminPagePropsType) => {
   const [activeTab, setActiveTab] = useState<'products' | 'coupons'>('products');
 
@@ -64,16 +60,11 @@ export const AdminPage = ({
           products={products}
           setProducts={setProducts}
           cart={cart}
-          isAdmin={isAdmin}
+          isAdmin={true}
           addNotification={addNotification}
         />
       ) : (
-        <AdminCoupon
-          coupons={coupons}
-          addCoupon={addCoupon}
-          deleteCoupon={deleteCoupon}
-          addNotification={addNotification}
-        />
+        <AdminCoupon coupons={coupons} setCoupons={setCoupons} addNotification={addNotification} />
       )}
     </div>
   );
