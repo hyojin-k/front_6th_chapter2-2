@@ -1,13 +1,11 @@
-import { NotificationType } from '../types/notification';
+import { useAtom } from 'jotai';
 import { XIcon } from '@/icons';
 import { Button } from '@/ui/Button';
+import { notificationsAtom } from '../atoms';
 
-interface NotificationPropsType {
-  notifications: NotificationType[];
-  setNotifications: (notifications: NotificationType[]) => void;
-}
+export const Notification = () => {
+  const [notifications, setNotifications] = useAtom(notificationsAtom);
 
-export const Notification = ({ notifications, setNotifications }: NotificationPropsType) => {
   if (notifications.length === 0) {
     return null;
   }

@@ -1,22 +1,12 @@
-import { CouponType } from '@/types';
 import { useCouponForm } from '../hooks/useCouponForm';
 import { AdminCouponCard } from './AdminCouponCard';
 import { AdminCouponForm } from './AdminCouponForm';
 import { useCoupon } from '../hooks/useCoupon';
-import { Dispatch, SetStateAction } from 'react';
+import { useNotification } from '../../../hooks';
 
-interface AdminCouponPropsType {
-  coupons: CouponType[];
-  setCoupons: Dispatch<SetStateAction<CouponType[]>>;
-  addNotification: (message: string, type: 'success' | 'error') => void;
-}
-
-export const AdminCoupon = ({ coupons, setCoupons, addNotification }: AdminCouponPropsType) => {
-  const { addCoupon, deleteCoupon } = useCoupon({
-    coupons,
-    setCoupons,
-    addNotification,
-  });
+export const AdminCoupon = () => {
+  const { addCoupon, deleteCoupon, coupons } = useCoupon();
+  const { addNotification } = useNotification();
 
   const { showCouponForm, setShowCouponForm, couponForm, setCouponForm, handleCouponSubmit } =
     useCouponForm(addCoupon);

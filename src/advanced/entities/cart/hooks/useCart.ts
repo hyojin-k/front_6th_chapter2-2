@@ -1,24 +1,15 @@
-import { Dispatch, useCallback, useEffect, useState } from 'react';
-import { CartItemType } from '@/types';
+import { useCallback } from 'react';
+import { useAtom, useAtomValue } from 'jotai';
+import { cartAtom, cartItemCountAtom, cartTotalPriceAtom } from '../../../atoms';
 import { ProductWithUI } from '../../product';
 import { getRemainingStock } from '@/utils';
+import { useNotification } from '../../../hooks/useNotification';
 
-interface UseCartPropsType {
-  products: ProductWithUI[];
-  addNotification: (message: string, type: 'success' | 'error') => void;
-  cart: CartItemType[];
-  setCart: Dispatch<React.SetStateAction<CartItemType[]>>;
-}
-
-export const useCart = ({ products, addNotification, cart, setCart }: UseCartPropsType) => {
-  // 장바구니 총 아이템 수 상태
-  const [totalItemCount, setTotalItemCount] = useState(0);
-
-  // 장바구니 아이템 수 업데이트
-  useEffect(() => {
-    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-    setTotalItemCount(count);
-  }, [cart]);
+export const useCart = () => {
+  const [cart, setCart] = useAtom(cartAtom);
+  const totalItemCount = useAtomValue(cartItemCountAtom);
+  const totalPrice = useAtomValue(cartTotalPriceAtom);
+  const { addNotification } = useNotification();
 
   // 장바구니에 상품 추가
   const addToCart = useCallback(
@@ -70,22 +61,22 @@ export const useCart = ({ products, addNotification, cart, setCart }: UseCartPro
         return;
       }
 
-      const product = products.find((p) => p.id === productId);
-      if (!product) return;
+      setCart((prevCart) => {
+        const item = prevCart.find((item) => item.product.id === productId);
+        if (!item) return prevCart;
 
-      const maxStock = product.stock;
-      if (newQuantity > maxStock) {
-        addNotification(`재고는 ${maxStock}개까지만 있습니다.`, 'error');
-        return;
-      }
+        const maxStock = item.product.stock;
+        if (newQuantity > maxStock) {
+          addNotification(`재고는 ${maxStock}개까지만 있습니다.`, 'error');
+          return prevCart;
+        }
 
-      setCart((prevCart) =>
-        prevCart.map((item) =>
+        return prevCart.map((item) =>
           item.product.id === productId ? { ...item, quantity: newQuantity } : item
-        )
-      );
+        );
+      });
     },
-    [products, removeFromCart, addNotification, setCart]
+    [removeFromCart, addNotification, setCart]
   );
 
   return {
@@ -95,5 +86,6 @@ export const useCart = ({ products, addNotification, cart, setCart }: UseCartPro
     removeFromCart,
     updateQuantity,
     totalItemCount,
+    totalPrice,
   };
 };

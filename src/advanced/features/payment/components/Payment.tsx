@@ -1,16 +1,23 @@
-import { useAtom } from 'jotai';
+import { CartItemType, CouponType } from '@/types';
 import { usePayment } from '../hooks/usePayment';
 import { Button } from '@/ui';
 import { calculateCartTotal } from '@/utils';
-import { cartAtom } from '../../../atoms';
-import { useCoupon } from '../../coupon/hooks/useCoupon';
-import { useNotification } from '../../../hooks';
 
-export const Payment = () => {
-  const [cart, setCart] = useAtom(cartAtom);
-  const { selectedCoupon, setSelectedCoupon } = useCoupon();
-  const { addNotification } = useNotification();
+interface PaymentPropsType {
+  addNotification: (message: string, type: 'success' | 'error') => void;
+  setCart: (cart: CartItemType[]) => void;
+  setSelectedCoupon: (coupon: CouponType | null) => void;
+  cart: CartItemType[];
+  selectedCoupon: CouponType | null;
+}
 
+export const Payment = ({
+  addNotification,
+  setCart,
+  setSelectedCoupon,
+  cart,
+  selectedCoupon,
+}: PaymentPropsType) => {
   const { completeOrder } = usePayment({
     addNotification,
     setCart,

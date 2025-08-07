@@ -1,24 +1,23 @@
-import { CartItemType } from '@/types';
+import React from 'react';
+import { useAtom } from 'jotai';
 import { SearchInput, Button } from '@/ui';
 import { CartIcon } from '@/icons';
+import { isAdminAtom, searchTermAtom, cartItemCountAtom, debouncedSearchTermAtom } from '../atoms';
 
-interface HeaderPropsType {
-  isAdmin: boolean;
-  searchTerm: string;
-  setSearchTerm: (value: string) => void;
-  setIsAdmin: (value: boolean) => void;
-  cart: CartItemType[];
-}
+export const Header = () => {
+  const [isAdmin, setIsAdmin] = useAtom(isAdminAtom);
+  const [searchTerm, setSearchTerm] = useAtom(searchTermAtom);
+  const [, setDebouncedSearchTerm] = useAtom(debouncedSearchTermAtom);
+  const [totalItemCount] = useAtom(cartItemCountAtom);
 
-export const Header = ({
-  isAdmin,
-  searchTerm,
-  setSearchTerm,
-  setIsAdmin,
-  cart,
-}: HeaderPropsType) => {
-  // 장바구니 총 아이템 수 계산
-  const totalItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  // 디바운스 효과
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm, setDebouncedSearchTerm]);
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-40 border-b">
@@ -51,7 +50,7 @@ export const Header = ({
               <div className="relative">
                 <CartIcon />
                 {/* 장바구니 아이템 수 표시 */}
-                {cart.length > 0 && (
+                {totalItemCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {totalItemCount}
                   </span>

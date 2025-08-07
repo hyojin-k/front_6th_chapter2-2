@@ -1,15 +1,13 @@
-import { Dispatch, useCallback, useState } from 'react';
+import { useCallback } from 'react';
+import { useAtom } from 'jotai';
+import { couponsAtom, selectedCouponAtom } from '../../../atoms';
 import { CouponType } from '@/types';
+import { useNotification } from '../../../hooks/useNotification';
 
-interface UseCouponPropsType {
-  setCoupons: Dispatch<React.SetStateAction<CouponType[]>>;
-  addNotification: (message: string, type: 'success' | 'error') => void;
-  coupons: CouponType[];
-}
-
-export const useCoupon = ({ coupons, setCoupons, addNotification }: UseCouponPropsType) => {
-  // 선택된 쿠폰
-  const [selectedCoupon, setSelectedCoupon] = useState<CouponType | null>(null);
+export const useCoupon = () => {
+  const [coupons, setCoupons] = useAtom(couponsAtom);
+  const [selectedCoupon, setSelectedCoupon] = useAtom(selectedCouponAtom);
+  const { addNotification } = useNotification();
 
   // 쿠폰 추가 (관리자 기능)
   const addCoupon = useCallback(
@@ -22,7 +20,7 @@ export const useCoupon = ({ coupons, setCoupons, addNotification }: UseCouponPro
       setCoupons((prev) => [...prev, newCoupon]);
       addNotification('쿠폰이 추가되었습니다.', 'success');
     },
-    [coupons, addNotification]
+    [coupons, addNotification, setCoupons]
   );
 
   // 쿠폰 삭제 (관리자 기능)
@@ -34,8 +32,15 @@ export const useCoupon = ({ coupons, setCoupons, addNotification }: UseCouponPro
       }
       addNotification('쿠폰이 삭제되었습니다.', 'success');
     },
-    [selectedCoupon, addNotification]
+    [selectedCoupon, addNotification, setCoupons, setSelectedCoupon]
   );
 
-  return { coupons, setCoupons, addCoupon, deleteCoupon, selectedCoupon, setSelectedCoupon };
+  return {
+    coupons,
+    setCoupons,
+    addCoupon,
+    deleteCoupon,
+    selectedCoupon,
+    setSelectedCoupon,
+  };
 };

@@ -1,15 +1,13 @@
-import { CouponType, CartItemType } from '@/types';
+import { useAtom } from 'jotai';
 import { applyCoupon } from '@/utils';
 import { useNotification } from '../../../hooks';
+import { cartAtom, couponsAtom } from '../../../atoms';
+import { useCoupon } from '../hooks/useCoupon';
 
-interface CouponPropsType {
-  cart: CartItemType[];
-  coupons: CouponType[];
-  selectedCoupon: CouponType | null;
-  setSelectedCoupon: (coupon: CouponType | null) => void;
-}
-
-export const Coupon = ({ cart, coupons, selectedCoupon, setSelectedCoupon }: CouponPropsType) => {
+export const Coupon = () => {
+  const [cart] = useAtom(cartAtom);
+  const [coupons] = useAtom(couponsAtom);
+  const { selectedCoupon, setSelectedCoupon } = useCoupon();
   const { addNotification } = useNotification();
 
   return (

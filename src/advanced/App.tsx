@@ -1,59 +1,41 @@
-import { useState } from 'react';
+import React from 'react';
+import { useAtom } from 'jotai';
 import { AdminPage, MainPage } from './pages';
 import { Header, Notification } from './components';
-import { useDebounce, useLocalStorage, useNotification } from './hooks';
-import { initialProducts, ProductWithUI } from './entities/product';
+import { initialProducts } from './entities/product';
 import { initialCoupons } from './entities/coupon';
-import { CartItemType, CouponType } from '@/types';
+import { productsAtom, couponsAtom, isAdminAtom } from './atoms';
 
 const App = () => {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin] = useAtom(isAdminAtom);
+  const [products, setProducts] = useAtom(productsAtom);
+  const [coupons, setCoupons] = useAtom(couponsAtom);
 
-  const [products, setProducts] = useLocalStorage<ProductWithUI[]>('products', initialProducts);
-  const [cart, setCart] = useLocalStorage<CartItemType[]>('cart', []);
-  const [coupons, setCoupons] = useState<CouponType[]>(initialCoupons);
-
-  const { searchTerm, setSearchTerm, debouncedSearchTerm } = useDebounce();
-  const { notifications, setNotifications, addNotification } = useNotification();
+  // 초기 데이터 로드 (로컬 스토리지에 데이터가 없을 때만)
+  React.useEffect(() => {
+    if (products.length === 0) {
+      setProducts(initialProducts);
+    }
+    if (coupons.length === 0) {
+      setCoupons(initialCoupons);
+    }
+  }, [products.length, coupons.length, setProducts, setCoupons]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 알림 메시지 표시 영역 */}
-      <Notification notifications={notifications} setNotifications={setNotifications} />
+      <Notification />
 
       {/* 헤더 영역 */}
-      <Header
-        isAdmin={isAdmin}
-        cart={cart}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        setIsAdmin={setIsAdmin}
-      />
+      <Header />
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         {isAdmin ? (
           // 관리자 대시보드
-          <AdminPage
-            products={products}
-            setProducts={setProducts}
-            cart={cart}
-            coupons={coupons}
-            setCoupons={setCoupons}
-            addNotification={addNotification}
-          />
+          <AdminPage />
         ) : (
           // 쇼핑몰 메인 페이지
-          <MainPage
-            products={products}
-            cart={cart}
-            setCart={setCart}
-            coupons={coupons}
-            setCoupons={setCoupons}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            debouncedSearchTerm={debouncedSearchTerm}
-            addNotification={addNotification}
-          />
+          <MainPage />
         )}
       </main>
     </div>

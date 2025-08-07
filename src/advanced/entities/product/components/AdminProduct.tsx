@@ -1,3 +1,4 @@
+import { useAtom } from 'jotai';
 import { Dispatch, SetStateAction } from 'react';
 import { ProductWithUI } from '../types/product';
 import { CartItemType } from '@/types';
@@ -7,21 +8,14 @@ import { Button } from '@/ui';
 import { initialProductFormData } from '../constants/product';
 import { AdminProductTable } from './AdminProductTable';
 import { AdminProductForm } from './AdminProductForm';
+import { productsAtom, cartAtom } from '../../../atoms';
+import { useNotification } from '../../../hooks';
 
-interface AdminProductPropsType {
-  products: ProductWithUI[];
-  setProducts: Dispatch<SetStateAction<ProductWithUI[]>>;
-  cart: CartItemType[];
-  isAdmin: boolean;
-  addNotification: (message: string, type: 'success' | 'error') => void;
-}
-export const AdminProduct = ({
-  products,
-  setProducts,
-  cart,
-  isAdmin,
-  addNotification,
-}: AdminProductPropsType) => {
+export const AdminProduct = () => {
+  const [products, setProducts] = useAtom(productsAtom);
+  const [cart] = useAtom(cartAtom);
+  const { addNotification } = useNotification();
+
   const { updateProduct, addProduct, deleteProduct } = useProduct({
     setProducts,
     addNotification,
@@ -58,7 +52,7 @@ export const AdminProduct = ({
       <AdminProductTable
         products={products}
         cart={cart}
-        isAdmin={isAdmin}
+        isAdmin={true}
         deleteProduct={deleteProduct}
         startEditProduct={startEditProduct}
       />

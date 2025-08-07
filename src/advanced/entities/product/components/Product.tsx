@@ -1,25 +1,17 @@
-import { CartItemType } from '@/types';
-import { ProductWithUI } from '../types/product';
+import { useAtom } from 'jotai';
 import { formatPrice, getRemainingStock } from '@/utils';
 import { ImageIcon } from '@/icons';
 import { Button } from '@/ui';
 import { useProductSearch } from '../hooks/useProductSearch';
+import { productsAtom, cartAtom, debouncedSearchTermAtom } from '../../../atoms';
+import { useCart } from '../../cart';
 
-interface ProductPropsType {
-  products: ProductWithUI[];
-  debouncedSearchTerm: string;
-  addToCart: (product: ProductWithUI) => void;
-  isAdmin: boolean;
-  cart: CartItemType[];
-}
+export const Product = () => {
+  const [products] = useAtom(productsAtom);
+  const [cart] = useAtom(cartAtom);
+  const [debouncedSearchTerm] = useAtom(debouncedSearchTermAtom);
+  const { addToCart } = useCart();
 
-export const Product = ({
-  products,
-  debouncedSearchTerm,
-  addToCart,
-  isAdmin,
-  cart,
-}: ProductPropsType) => {
   const { filteredProducts } = useProductSearch({
     debouncedSearchTerm,
     products,
@@ -76,7 +68,7 @@ export const Product = ({
                   {/* 가격 정보 */}
                   <div className="mb-3">
                     <p className="text-lg font-bold text-gray-900">
-                      {formatPrice(product, products, cart, isAdmin)}
+                      {formatPrice(product, products, cart, false)}
                     </p>
                     {product.discounts.length > 0 && (
                       <p className="text-xs text-gray-500">

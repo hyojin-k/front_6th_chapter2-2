@@ -1,26 +1,8 @@
-import { Dispatch, SetStateAction, useState } from 'react';
-import { CartItemType, CouponType } from '@/types';
-import { ProductWithUI } from '../entities/product/types/product';
+import { useState } from 'react';
 import { AdminCoupon } from '../entities/coupon/components/AdminCoupon';
 import { AdminProduct } from '../entities/product/components/AdminProduct';
 
-interface AdminPagePropsType {
-  products: ProductWithUI[];
-  setProducts: Dispatch<SetStateAction<ProductWithUI[]>>;
-  cart: CartItemType[];
-  coupons: CouponType[];
-  setCoupons: Dispatch<SetStateAction<CouponType[]>>;
-  addNotification: (message: string, type: 'success' | 'error') => void;
-}
-
-export const AdminPage = ({
-  products,
-  setProducts,
-  cart,
-  coupons,
-  setCoupons,
-  addNotification,
-}: AdminPagePropsType) => {
+export const AdminPage = () => {
   const [activeTab, setActiveTab] = useState<'products' | 'coupons'>('products');
 
   return (
@@ -55,17 +37,7 @@ export const AdminPage = ({
         </nav>
       </div>
 
-      {activeTab === 'products' ? (
-        <AdminProduct
-          products={products}
-          setProducts={setProducts}
-          cart={cart}
-          isAdmin={true}
-          addNotification={addNotification}
-        />
-      ) : (
-        <AdminCoupon coupons={coupons} setCoupons={setCoupons} addNotification={addNotification} />
-      )}
+      {activeTab === 'products' ? <AdminProduct /> : <AdminCoupon />}
     </div>
   );
 };
