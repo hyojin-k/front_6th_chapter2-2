@@ -1,7 +1,4 @@
 import { useAtom } from 'jotai';
-import { Dispatch, SetStateAction } from 'react';
-import { ProductWithUI } from '../types/product';
-import { CartItemType } from '@/types';
 import { useProductForm } from '../hooks/useProductForm';
 import { useProduct } from '../hooks/useProduct';
 import { Button } from '@/ui';
