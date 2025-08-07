@@ -10,6 +10,15 @@ const __dirname = dirname(__filename);
 export default mergeConfig(
   defineConfig({
     plugins: [react()],
+    root: ".",
+    base: "/front_6th_chapter2-2/",
+    build: {
+      rollupOptions: {
+        input: "./index.advanced.html",
+      },
+      outDir: "dist",
+      copyPublicDir: true,
+    },
     resolve: {
       alias: {
         '@': resolve(__dirname, './src'),
